@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FlagshipService } from "@/services/flagshipService";
 import { useRouter } from "next/router";
-import { IRegistration } from "@/interfaces/trip/trip";
+import { IRegistration, IUser } from "@/interfaces/trip/trip";
 import { differenceInYears, parseISO } from "date-fns";
 import { toast } from "sonner";
 
@@ -164,17 +164,17 @@ export default function UserDetails() {
       <div className="p-4 flex items-center">
         <div className="h-16 w-16 mr-4 overflow-hidden rounded-full bg-gray-200">
           <img
-            src={registeredUser?.user.profileImg}
+            src={(registeredUser?.user as IUser).profileImg}
             alt="Ali Rehan"
             className="h-full w-full object-cover"
           />
         </div>
         <div className="flex-1">
           <h2 className="text-2xl font-bold">
-            {registeredUser?.user.fullName}
+            {(registeredUser?.user as IUser).fullName}
           </h2>
           <p className="text-sm text-gray-500">
-            Joining From: {registeredUser?.user.city}
+            Joining From: {(registeredUser?.user as IUser).city}
           </p>
         </div>
         <div className="relative">
@@ -207,21 +207,21 @@ export default function UserDetails() {
               <div className="flex justify-between">
                 <span className="text-gray-500">Email</span>
                 <span className="font-medium">
-                  {registeredUser?.user.email}
+                  {(registeredUser?.user as IUser).email}
                 </span>
               </div>
 
               <div className="flex justify-between">
                 <span className="text-gray-500">Phone</span>
                 <span className="font-medium">
-                  {registeredUser?.user.phone}
+                  {(registeredUser?.user as IUser).phone}
                 </span>
               </div>
 
               <div className="flex justify-between">
                 <span className="text-gray-500">Social Link</span>
                 <span className="font-medium">
-                  {registeredUser?.user.socialLink}
+                  {(registeredUser?.user as IUser).socialLink}
                 </span>
               </div>
 
@@ -268,14 +268,14 @@ export default function UserDetails() {
               <div className="flex justify-between">
                 <span className="text-gray-500">Name</span>
                 <span className="font-medium">
-                  {registeredUser?.user.fullName}
+                  {(registeredUser?.user as IUser).fullName}
                 </span>
               </div>
 
               <div className="flex justify-between">
                 <span className="text-gray-500">Gender</span>
                 <span className="font-medium">
-                  {registeredUser?.user.gender}
+                  {(registeredUser?.user as IUser).gender}
                 </span>
               </div>
 
@@ -283,10 +283,10 @@ export default function UserDetails() {
                 <span className="text-gray-500">Age</span>
                 <span className="font-medium">
                   {" "}
-                  {registeredUser?.user.dateOfBirth
+                  {(registeredUser?.user as IUser).dateOfBirth
                     ? differenceInYears(
                         new Date(),
-                        parseISO(registeredUser.user.dateOfBirth)
+                        parseISO((registeredUser?.user as IUser).dateOfBirth)
                       )
                     : "N/A"}
                 </span>
@@ -295,7 +295,7 @@ export default function UserDetails() {
               <div className="flex justify-between">
                 <span className="text-gray-500">University</span>
                 <span className="font-medium">
-                  {registeredUser?.user.university}
+                  {(registeredUser?.user as IUser).university}
                 </span>
               </div>
             </div>

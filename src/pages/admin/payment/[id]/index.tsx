@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
 import { PaymentService } from "@/services/paymentService";
 import { IPayment } from "@/services/types/payment";
 import { FlagshipService } from "@/services/flagshipService";
@@ -18,11 +17,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { IRegistration, IUser } from "@/interfaces/trip/trip";
+import { useRouter } from "next/router";
 
 export default function PaymentDetailsPage() {
   const router = useRouter();
-  const params = useParams();
-  const id = params.id as string;
+  const { id } = router.query;
+  const paymentId = id as string;
   const { toast } = useToast();
 
   const [payment, setPayment] = useState<IPayment | null>(null);
@@ -33,19 +34,21 @@ export default function PaymentDetailsPage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await PaymentService.getPayment(id);
+        const data = await PaymentService.getPayment(paymentId);
         setPayment(data);
         setLoading(false);
 
         // Fetch flagship details if it's a string (ID)
-        if (typeof data.flagshipTrip === "string") {
+        if (typeof (data.registration as IRegistration).flagship === "string") {
           const flagshipData = await FlagshipService.getFlagshipByID(
-            data.flagshipTrip
+            (data.registration as IRegistration).flagship as string
           );
           setFlagship(flagshipData);
         } else {
           // If it's already an IFlagship object
-          setFlagship(data.flagshipTrip);
+          setFlagship(
+            (data.registration as IRegistration).flagship as IFlagship
+          );
         }
       } catch (error) {
         console.error("Error fetching payment details:", error);
@@ -57,7 +60,6 @@ export default function PaymentDetailsPage() {
   }, [id]);
 
   const handleApprovePayment = async () => {
-    const paymentId = Array.isArray(params.id) ? params.id[0] : params.id;
     if (!paymentId) return;
     try {
       await PaymentService.approvePayment(paymentId);
@@ -79,7 +81,6 @@ export default function PaymentDetailsPage() {
   };
 
   const handleRejectPayment = async () => {
-    const paymentId = Array.isArray(params.id) ? params.id[0] : params.id;
     if (!paymentId) return;
     try {
       await PaymentService.rejectPayment(paymentId);
@@ -123,7 +124,10 @@ export default function PaymentDetailsPage() {
   }
 
   // Type guard to check if user is an IUser object
-  const user = typeof payment.user === "string" ? null : payment.user;
+  const user =
+    typeof (payment.registration as IRegistration).user === "string"
+      ? null
+      : ((payment.registration as IRegistration).user as IUser);
   // Type guard to check if bankAccount is an IBankAccount object
   const bankAccount =
     typeof payment.bankAccount === "string" ? null : payment.bankAccount;

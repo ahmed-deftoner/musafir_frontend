@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
 import { UserService } from "@/services/userService";
 import { IUser } from "@/services/types/user";
 import { Button } from "@/components/ui/button";
@@ -21,20 +20,21 @@ import {
   Hash,
   LucideIcon,
 } from "lucide-react";
+import { useRouter } from "next/router";
 
 export default function UserDetailsPage() {
-  const params = useParams();
-  const id = params.id as string;
+  const router = useRouter();
+  const { id } = router.query;
+  const userId = id as string;
   const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
-  const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const data = await UserService.getUserById(id);
+        const data = await UserService.getUserById(userId);
         setUser(data);
       } catch (error) {
         console.error("Error fetching user:", error);

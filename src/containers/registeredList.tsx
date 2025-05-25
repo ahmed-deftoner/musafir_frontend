@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FlagshipService } from "@/services/flagshipService";
-import { IRegistration } from "@/interfaces/trip/trip";
+import { IRegistration, IUser } from "@/interfaces/trip/trip";
 import { useRouter } from "next/router";
 
 export const RegistrationsList = () => {
@@ -62,14 +62,18 @@ export const RegistrationsList = () => {
             <div className="border rounded-lg p-4 flex items-center relative">
               <div className="h-12 w-12 mr-4 overflow-hidden rounded-full">
                 <img
-                  src={r.user.profileImg || "/placeholder.svg"}
-                  alt={r.user.fullName}
+                  src={(r.user as IUser).profileImg || "/placeholder.svg"}
+                  alt={(r.user as IUser).fullName}
                   className="h-full w-full object-cover"
                 />
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-lg">{r.user.fullName}</h3>
-                <p className="text-sm text-gray-500">{`Joining from ${r.user.city}`}</p>
+                <h3 className="font-bold text-lg">
+                  {(r.user as IUser).fullName}
+                </h3>
+                <p className="text-sm text-gray-500">{`Joining from ${
+                  (r.user as IUser).city
+                }`}</p>
               </div>
               <div className="absolute top-4 right-4">
                 <Image

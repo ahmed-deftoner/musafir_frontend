@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FlagshipService } from "@/services/flagshipService";
-import { IPayment, IRegistration } from "@/interfaces/trip/trip";
+import { IPayment, IRegistration, IUser } from "@/interfaces/trip/trip";
 import { useRouter } from "next/router";
 import { format } from "date-fns";
 
@@ -91,9 +91,11 @@ export const PaidListContainer = () => {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg">{r.user.fullName}</h3>
+                  <h3 className="font-bold text-lg">
+                    {(r.user as IUser).fullName}
+                  </h3>
                   <p className="text-sm text-gray-500">
-                    Joining From: {r.user.city}
+                    Joining From: {(r.user as IUser).city}
                   </p>
                 </div>
                 <div className="relative top-4 right-4">

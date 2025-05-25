@@ -4,7 +4,7 @@ import { Card } from "@/components/card";
 import Image from "next/image";
 import { FlagshipService } from "../services/flagshipService";
 import { useRouter } from "next/router";
-import { IRegistration } from "@/interfaces/trip/trip";
+import { IRegistration, IUser } from "@/interfaces/trip/trip";
 import Link from "next/link";
 
 export const VerificationList = () => {
@@ -40,22 +40,24 @@ export const VerificationList = () => {
     <div className="p-4 space-y-4">
       {verificationUsers.map((registration: IRegistration) => (
         <Link
-          href={`/admin/user/${registration.user._id}`}
+          href={`/admin/user/${(registration.user as IUser)._id}`}
           key={registration.id}
         >
           <Card key={registration.id} className="p-4 flex items-center">
             <Avatar className="h-12 w-12 mr-4">
               <img
-                src={registration.user.profileImg || "/placeholder.svg"}
-                alt={registration.user.fullName}
+                src={
+                  (registration.user as IUser).profileImg || "/placeholder.svg"
+                }
+                alt={(registration.user as IUser).fullName}
               />
             </Avatar>
             <div className="flex-1">
               <h3 className="font-bold text-lg">
-                {registration.user.fullName}
+                {(registration.user as IUser).fullName}
               </h3>
               <p className="text-sm text-gray-500">
-                Joining From: {registration.user.city}
+                Joining From: {(registration.user as IUser).city}
               </p>
             </div>
             {
