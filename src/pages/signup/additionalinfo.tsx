@@ -40,17 +40,18 @@ export default function AdditionalInfo() {
       ...savedData, university, cnic, socialLink, city, employmentStatus
     }
     localStorage.setItem('formData', JSON.stringify(formData));
-    
+
     const payload: BaseUser = { ...formData };
     const { userId, verificationId } = await action.register(payload) as { userId: string, verificationId: string };
-    
-    const registration = JSON.parse(localStorage.getItem('registration') || '{}');
-    registration.userId = userId;
-    if(registration){
-      const { registrationId, message } = await registrationAction.create(registration) as { registrationId: string, message: string };
-      localStorage.setItem("registrationId", JSON.stringify(registrationId));
-    }
 
+    if (flagshipId) {
+      const registration = JSON.parse(localStorage.getItem('registration') || '{}');
+      registration.userId = userId;
+      if (registration) {
+        const { registrationId, message } = await registrationAction.create(registration) as { registrationId: string, message: string };
+        localStorage.setItem("registrationId", JSON.stringify(registrationId));
+      }
+    }
     const storeData = {
       ...formData, verificationId
     }
@@ -169,7 +170,7 @@ export default function AdditionalInfo() {
                     checked={employmentStatus === 'employed'}
                     onChange={() => setEmploymentStatus("employed")}
                     className="mr-2 accent-black"
-                />
+                  />
                   Employed Professional
                 </label>
                 <label className="flex items-center gap-3 cursor-pointer">
