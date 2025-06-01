@@ -9,7 +9,7 @@ export function Navigation() {
   const links = [
     { href: "/home", label: "Home", icon: Home },
     { href: "/passport", label: "Passport", icon: Flag },
-    { href: "", label: "Wallet", icon: Wallet },
+    { href: "/wallet", label: "Wallet", icon: Wallet },
     { href: "", label: "Referral", icon: Users },
     { href: "/userSettings", label: "Settings", icon: Settings },
   ]
