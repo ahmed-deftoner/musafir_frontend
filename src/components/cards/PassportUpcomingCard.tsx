@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import useRegistrationHook from "@/hooks/useRegistrationHandler";
 import { ROUTES_CONSTANTS } from "@/config/constants";
 import { useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { X } from "lucide-react";
 
-type StatusType = "rejected" | "pending" | "not reserved" | "confirmed";
+type StatusType = "rejected" | "pending" | "notReserved" | "confirmed" | "refundProcessing";
 
 interface PaymentDetails {
   amount: number;
@@ -18,9 +19,11 @@ const getStatusStyles = (status: StatusType) => {
       return "bg-white text-red-700 border-red-300";
     case "pending":
       return "bg-white text-gray-700 border-gray-300";
-    case "not reserved":
+    case "notReserved":
       return "bg-white text-red-700 border-red-300";
     case "confirmed":
+      return "bg-white text-green-700 border-green-300";
+    case "refundProcessing":
       return "bg-white text-green-700 border-green-300";
     default:
       return "bg-white text-gray-700 border-gray-300";
@@ -31,28 +34,33 @@ const getActionButton = (
   status: StatusType,
   registrationId: string,
   sendReEvaluateRequestToJury: any,
-  router: AppRouterInstance
+  router: AppRouterInstance,
+  setShowPdfModal: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   switch (status) {
     case "rejected":
       return {
-        text: "Ask Jury to re-evaluate (Rs.500)",
-        onClick: () => sendReEvaluateRequestToJury(registrationId),
+        css: '',
+        text: 'Ask Jury to re-evaluate (Rs.500)',
+        onClick: () => sendReEvaluateRequestToJury(registrationId)
       };
     case "pending":
       return {
-        text: "Add video for quicker verification",
-        onClick: () => router.push(ROUTES_CONSTANTS.VERIFICATION_REQUEST),
+        css: '',
+        text: 'Add video for quicker verification',
+        onClick: () => router.push(ROUTES_CONSTANTS.VERIFICATION_REQUEST)
       };
-    case "not reserved":
+    case "notReserved":
       return {
-        text: "Complete Payment",
-        onClick: () => console.log("Complete payment clicked"),
+        css: 'bg-[#FF9000]',
+        text: 'Complete Payment',
+        onClick: () => router.push(`/musafir/payment/${registrationId}`)
       };
     case "confirmed":
       return {
-        text: "View Brief",
-        onClick: () => console.log("View brief clicked"),
+        css: 'bg-[#FF9000]',
+        text: 'View Brief',
+        onClick: () => setShowPdfModal(true)
       };
     default:
       return {
@@ -80,7 +88,13 @@ const StatusInfo: React.FC<{
           {`Applied on ${appliedDate}`}
         </p>
       );
-    case "not reserved":
+    case "notReserved":
+    case "refundProcessing":
+      return (
+        <p className="text-sm text-gray-900">
+          Status: Refund Pending on 3m Team
+        </p>
+      );
     case "confirmed":
       if (!paymentInfo) return null;
       return (
@@ -132,14 +146,17 @@ const PassportUpcomingCard: React.FC<any> = ({
   image,
   paymentInfo,
   appliedDate,
+  detailedPlan,
 }) => {
   const { sendReEvaluateRequestToJury } = useRegistrationHook();
   const router = useRouter();
+  const [showPdfModal, setShowPdfModal] = useState(false);
   const actionButton = getActionButton(
     status,
     registrationId,
     sendReEvaluateRequestToJury,
-    router
+    router,
+    setShowPdfModal,
   );
 
   return (
@@ -182,7 +199,7 @@ const PassportUpcomingCard: React.FC<any> = ({
           <div className="flex items-center justify-between">
             <button
               onClick={actionButton.onClick}
-              className="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-[#FF9000] hover:text-gray-900 hover:border-yellow-500 active:bg-yellow-400"
+              className={`rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-[#FF9000] hover:text-gray-900 hover:border-yellow-500 active:bg-yellow-400 ${actionButton.css ? actionButton.css : 'bg.white'}`}
             >
               {actionButton.text}
             </button>
@@ -197,6 +214,29 @@ const PassportUpcomingCard: React.FC<any> = ({
           </div>
         </div>
       </div>
+
+      {showPdfModal && detailedPlan && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg w-full max-w-4xl h-[90vh] flex flex-col">
+            <div className="flex justify-between items-center p-2 border-b">
+              <h3 className="text-md font-semibold">Detailed Travel Plan</h3>
+              <button
+                onClick={() => setShowPdfModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <iframe
+                src={detailedPlan}
+                className="w-full h-full"
+                title="Detailed Travel Plan"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

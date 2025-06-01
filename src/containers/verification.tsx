@@ -4,8 +4,9 @@ import { Card } from "@/components/card";
 import Image from "next/image";
 import { FlagshipService } from "../services/flagshipService";
 import { useRouter } from "next/router";
-import { IRegistration, IUser } from "@/interfaces/trip/trip";
+import { IRegistration } from "@/interfaces/trip/trip";
 import Link from "next/link";
+import { IUser } from "@/services/types/user";
 
 export const VerificationList = () => {
   const [verificationUsers, setVerificationUsers] = useState<IRegistration[]>(

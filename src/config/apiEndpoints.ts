@@ -17,12 +17,13 @@ const endpoints = {
     GET_PAST_PASSPORT: "/registration/pastPassport",
     GET_UPCOMING_PASSPORT: "/registration/upcomingPassport",
     SEND_RE_EVALUATE_REQUEST_TO_JURY: "/registration/reEvaluateRequestToJury",
+    GET_REGISTRATION_BY_ID: "/registration/getRegistrationById",
   },
   FEEDBACK: {
     CREATE: "/feedback/:registrationId",
   },
   FAQ: {
-    GET: "/faq/:flagshipId",
+    GET: "/faq",
   },
   RATING: {
     GET: "/rating/:flagshipId",

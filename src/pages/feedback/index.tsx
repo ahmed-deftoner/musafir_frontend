@@ -71,8 +71,8 @@ function Feedback() {
   }, []);
 
   return (
-    <div className='min-h-screen bg-gray-50'>
-      <div className='mx-auto max-w-lg bg-white pb-20 md:my-8 md:rounded-2xl md:shadow-lg'>
+    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
+      <div className='bg-white w-full max-w-md mx-auto rounded-lg pb-20'>
         {/* Header */}
         <header className='flex items-center p-4'>
           <button onClick={() => router.back()} className="mr-4">
@@ -86,25 +86,25 @@ function Feedback() {
         {/* Main Content */}
         <main className='px-4 space-y-6'>
           <div>
-            <h2 className='text-2xl font-bold text-[#2B2D42]'>Quickest Feedback Ever</h2>
-            <p className='text-[#757575] text-sm'>Fill out this small community onboarding form</p>
+            <h2 className='text-3xl font-bold text-[#2B2D42]'>Quickest Feedback Ever</h2>
+            <p className='text-[#757575] text-md'>Fill out this small community onboarding form</p>
           </div>
 
           <div className='space-y-6'>
             {/* Flagship Selection */}
-            <div className='space-y-2'>
-              <label className='block text-sm font-medium text-gray-900'>
+            <div className='space-y-3'>
+              <label className='block text-md font-medium text-gray-900'>
                 Flagship you have registered in
               </label>
               <div className='rounded-lg bg-white text-gray-900 flex justify-between items-center px-4'>
                 <div className='font-semibold'>{title || 'Spooktober3.0'}</div>
-                <div className='text-sm text-[#757575]'>Rs.{price ? Number(price).toLocaleString() : '43,000'}</div>
+                <div className='text-md text-[#757575]'>Rs.{price ? Number(price).toLocaleString() : '43,000'}</div>
               </div>
             </div>
 
             {/* Traveler Type */}
-            <div className='space-y-2'>
-              <label className='block text-sm font-medium text-gray-900'>
+            <div className='space-y-3'>
+              <label className='block text-md font-medium text-gray-900'>
                 Are you a solo female traveller?
               </label>
               <div className='flex overflow-x-auto space-x-3 pb-2' style={{
@@ -118,7 +118,7 @@ function Feedback() {
                 `}</style>
                 <button
                   onClick={() => setTravellerType('solo-female')}
-                  className={`flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap ${travellerType === 'solo-female'
+                  className={`flex-shrink-0 rounded-full px-4 py-2 text-md font-medium whitespace-nowrap ${travellerType === 'solo-female'
                     ? 'bg-black text-white'
                     : 'bg-gray-100 text-gray-900'
                     }`}
@@ -127,7 +127,7 @@ function Feedback() {
                 </button>
                 <button
                   onClick={() => setTravellerType('no-male')}
-                  className={`flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap ${travellerType === 'no-male'
+                  className={`flex-shrink-0 rounded-full px-4 py-2 text-md font-medium whitespace-nowrap ${travellerType === 'no-male'
                     ? 'bg-black text-white'
                     : 'bg-gray-100 text-gray-900'
                     }`}
@@ -136,7 +136,7 @@ function Feedback() {
                 </button>
                 <button
                   onClick={() => setTravellerType('female-with-family')}
-                  className={`flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap ${travellerType === 'female-with-family'
+                  className={`flex-shrink-0 rounded-full px-4 py-2 text-md font-medium whitespace-nowrap ${travellerType === 'female-with-family'
                     ? 'bg-black text-white'
                     : 'bg-gray-100 text-gray-900'
                     }`}
@@ -147,11 +147,11 @@ function Feedback() {
             </div>
 
             {/* Trip Reason */}
-            <div className='space-y-2'>
-              <label className='block text-sm font-medium text-gray-900'>
+            <div className='space-y-3'>
+              <label className='block text-md font-medium text-gray-900'>
                 How satisfied were you with your trip experience?
               </label>
-              <div className='grid grid-cols-2 gap-y-3'>
+              <div className='grid grid-cols-2 gap-y-4'>
                 <label className='flex items-center gap-3 cursor-pointer'>
                   <div className="relative flex items-center justify-center">
                     <input
@@ -165,7 +165,7 @@ function Feedback() {
                       {tripReason === 'change-of-plans' && <div className='h-2.5 w-2.5 rounded-full bg-black'></div>}
                     </div>
                   </div>
-                  <span className={`text-sm ${tripReason === 'change-of-plans' ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Change of plans</span>
+                  <span className={`text-md ${tripReason === 'change-of-plans' ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Change of plans</span>
                 </label>
 
                 <label className='flex items-center gap-3 cursor-pointer'>
@@ -181,7 +181,7 @@ function Feedback() {
                       {tripReason === 'family-errands' && <div className='h-2.5 w-2.5 rounded-full bg-black'></div>}
                     </div>
                   </div>
-                  <span className={`text-sm ${tripReason === 'family-errands' ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Family errands</span>
+                  <span className={`text-md ${tripReason === 'family-errands' ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Family errands</span>
                 </label>
 
                 <label className='flex items-center gap-3 cursor-pointer'>
@@ -197,7 +197,7 @@ function Feedback() {
                       {tripReason === 'health-reasons' && <div className='h-2.5 w-2.5 rounded-full bg-black'></div>}
                     </div>
                   </div>
-                  <span className={`text-sm ${tripReason === 'health-reasons' ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Health reasons</span>
+                  <span className={`text-md ${tripReason === 'health-reasons' ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Health reasons</span>
                 </label>
 
                 <label className='flex items-center gap-3 cursor-pointer'>
@@ -213,13 +213,13 @@ function Feedback() {
                       {tripReason === 'financial-constraints' && <div className='h-2.5 w-2.5 rounded-full bg-black'></div>}
                     </div>
                   </div>
-                  <span className={`text-sm ${tripReason === 'financial-constraints' ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Financial constraints</span>
+                  <span className={`text-md ${tripReason === 'financial-constraints' ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Financial constraints</span>
                 </label>
               </div>
             </div>
 
-            <div className='space-y-2'>
-              <label className='block text-sm font-medium text-gray-900'>
+            <div className='space-y-3'>
+              <label className='block text-md font-medium text-gray-900'>
                 Please rate your experience with the trip?
               </label>
               <div className='space-y-3'>
@@ -286,12 +286,12 @@ function Feedback() {
             </div>
 
             {/* Like About Trip */}
-            <div className='space-y-2'>
+            <div className='space-y-3'>
               <div className='flex justify-between items-center'>
-                <label className='block text-sm font-medium text-gray-900'>
+                <label className='block text-md font-medium text-gray-900'>
                   What did you like most about your trip? (optional)
                 </label>
-                <span className='text-sm text-[#757575]'>{likeAboutTrip.length}/100</span>
+                <span className='text-md text-[#757575]'>{likeAboutTrip.length}/100</span>
               </div>
               <textarea
                 value={likeAboutTrip}
@@ -303,12 +303,12 @@ function Feedback() {
             </div>
 
             {/* Improvement Suggestions */}
-            <div className='space-y-2'>
+            <div className='space-y-3'>
               <div className='flex justify-between items-center'>
-                <label className='block text-sm font-medium text-gray-900'>
+                <label className='block text-md font-medium text-gray-900'>
                   What could we improve for future trips? (optional)
                 </label>
-                <span className='text-sm text-[#757575]'>{improvement.length}/100</span>
+                <span className='text-md text-[#757575]'>{improvement.length}/100</span>
               </div>
               <textarea
                 value={improvement}
@@ -320,8 +320,8 @@ function Feedback() {
             </div>
 
             {/* Rate Experience */}
-            <div className='space-y-2'>
-              <label className='block text-sm font-medium text-gray-900'>
+            <div className='space-y-3'>
+              <label className='block text-md font-medium text-gray-900'>
                 If you have 1 more minute, can you please rate certain experiences and the management team?
               </label>
               <div className='flex flex-col gap-3'>
@@ -338,7 +338,7 @@ function Feedback() {
                       {rateExperience && <div className='h-2.5 w-2.5 rounded-full bg-black'></div>}
                     </div>
                   </div>
-                  <span className={`text-sm ${rateExperience ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Yes, I'll help design better trips</span>
+                  <span className={`text-md ${rateExperience ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Yes, I'll help design better trips</span>
                 </label>
 
                 <label className='flex items-center gap-3 cursor-pointer'>
@@ -354,7 +354,7 @@ function Feedback() {
                       {noRateExperience && <div className='h-2.5 w-2.5 rounded-full bg-black'></div>}
                     </div>
                   </div>
-                  <span className={`text-sm ${noRateExperience ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Nah, got no time</span>
+                  <span className={`text-md ${noRateExperience ? 'font-semibold' : 'text-[#5E5E5E]'}`}>Nah, got no time</span>
                 </label>
               </div>
             </div>
@@ -363,12 +363,12 @@ function Feedback() {
             {rateExperience && (
               <>
                 {/* Team Response Rating */}
-                <div className='space-y-2'>
-                  <label className='block text-sm font-medium text-gray-900'>
+                <div className='space-y-3'>
+                  <label className='block text-md font-medium text-gray-900'>
                     How responsive was the team to your queries?
                   </label>
                   <div className='space-y-3'>
-                    <div className='flex items-center justify-between text-sm text-[#757575] px-5'>
+                    <div className='flex items-center justify-between text-dm text-[#757575] px-5'>
                       <span>1 (Not responsive)</span>
                       <span>10 (Extremely responsive)</span>
                     </div>
@@ -431,7 +431,7 @@ function Feedback() {
                 </div>
 
                 {/* Who did you talk to */}
-                <div className='space-y-2'>
+                <div className='space-y-3'>
                   <input
                     type="text"
                     value={talkTo}
@@ -442,8 +442,8 @@ function Feedback() {
                 </div>
 
                 {/* Most Enjoyable Activity */}
-                <div className='space-y-2'>
-                  <label className='block text-sm font-medium text-gray-900'>
+                <div className='space-y-3'>
+                  <label className='block text-md font-medium text-gray-900'>
                     Most enjoyable activity in the itinerary was
                   </label>
                   <input
@@ -456,8 +456,8 @@ function Feedback() {
                 </div>
 
                 {/* Least Enjoyable Activity */}
-                <div className='space-y-2'>
-                  <label className='block text-sm font-medium text-gray-900'>
+                <div className='space-y-3'>
+                  <label className='block text-md font-medium text-gray-900'>
                     And now the least enjoyable activity
                   </label>
                   <input
@@ -470,11 +470,11 @@ function Feedback() {
                 </div>
 
                 {/* Whistleblowing Section */}
-                <div className='space-y-2'>
-                  <label className='block text-sm font-medium text-gray-900'>
+                <div className='space-y-3'>
+                  <label className='block text-md font-medium text-gray-900'>
                     Whistleblowing Section ⚠️⚠️⚠️
                   </label>
-                  <p className='text-sm text-[#757575]'>
+                  <p className='text-md text-[#757575]'>
                     If you observed any unethical behavior, safety violations, or other serious concerns during the trip, please describe them here. This form is kept anonymous just so we could add this section.
                   </p>
                   <textarea
@@ -487,11 +487,11 @@ function Feedback() {
                 </div>
 
                 {/* Contact Information */}
-                <div className='space-y-2'>
-                  <label className='block text-sm font-medium text-gray-900'>
+                <div className='space-y-3'>
+                  <label className='block text-md font-medium text-gray-900'>
                     If you want us to reach back, please drop your number or email
                   </label>
-                  <p className='text-sm text-[#757575]'>
+                  <p className='text-md text-[#757575]'>
                     Certain cases require us to hear more, pls share with us a way to contact you. (Because this form is truly anonymous we don't even collect emails)
                   </p>
                   <input
@@ -516,8 +516,8 @@ function Feedback() {
         </main>
 
         {/* Navigation */}
-        <Navigation />
       </div>
+      <Navigation />
     </div>
   );
 }

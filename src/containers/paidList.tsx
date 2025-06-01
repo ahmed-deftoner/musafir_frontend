@@ -5,9 +5,10 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FlagshipService } from "@/services/flagshipService";
-import { IPayment, IRegistration, IUser } from "@/interfaces/trip/trip";
+import { IPayment, IRegistration } from "@/interfaces/trip/trip";
 import { useRouter } from "next/router";
 import { format } from "date-fns";
+import { IUser } from "@/services/types/user";
 
 export const PaidListContainer = () => {
   const [paymentFilter, setPaymentFilter] = useState<

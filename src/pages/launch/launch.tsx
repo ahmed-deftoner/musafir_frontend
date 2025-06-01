@@ -1,37 +1,26 @@
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import imag from './../../assets/launchscreen.jpeg'
+import { useEffect } from 'react';
 
 export default function LaunchScreen() {
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
-    // Check if there are query parameters in the URL
     const queryParams = router.query;
     if (Object.keys(queryParams).length > 0) {
-      // Save the query parameters in localStorage
-      localStorage.setItem(
-        "flagshipId",
-        JSON.stringify(queryParams?.flagshipId)
-      );
-      console.log("Query parameters saved:", queryParams);
+      localStorage.setItem('flagshipId', JSON.stringify(queryParams?.flagshipId));
+      console.log('Query parameters saved:', queryParams);
     } else {
-      // Clear the variable in localStorage if no query parameters exist
-      localStorage.removeItem("flagshipId");
-      console.log("Query parameters cleared");
+      localStorage.removeItem('flagshipId');
+      console.log('Query parameters cleared');
     }
-  }, [router.query]); // Run this effect whenever the query parameters change
-
+  }, [router.query]);
   return (
-    <div className="min-h-screen bg-gray-50 md:flex md:items-center md:justify-center p-4">
+    <div className="min-h-screen bg-white md:flex md:items-center md:justify-center p-4">
       <div className="bg-white w-full max-w-md mx-auto rounded-lg shadow-sm">
-        {/* Background Image with Overlay */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
-
         {/* Content */}
-        <div className="relative flex min-h-screen flex-col items-center justify-center px-4 text-white">
+        <div className="relative flex min-h-screen flex-col items-center justify-center px-4 text-[#2B2D42]">
           {/* Logo */}
           <div className="mb-8">
             <svg
@@ -59,21 +48,16 @@ export default function LaunchScreen() {
 
           {/* Buttons */}
           <div className="w-full max-w-sm space-y-4">
-            <button
-              onClick={() => router.push("/login")}
-              className="w-full rounded-lg bg-orange-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-orange-600"
-            >
+            <button onClick={() => router.push('/login')} className="w-full rounded-lg bg-orange-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-orange-600">
               Yes
             </button>
-            <button
-              onClick={() => router.push("/signup/create-account")}
-              className="w-full rounded-lg border-2 border-orange-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-orange-500/10"
-            >
+            <button onClick={() => router.push('/signup/create-account')} className="w-full rounded-lg border-2 border-orange-500 px-6 py-3 font-semibold text-[#2B2D42] transition-colors hover:bg-orange-500/10">
               No
             </button>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
+

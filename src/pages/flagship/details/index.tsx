@@ -44,8 +44,7 @@ export default function FlagshipDetails() {
   const [showPdfModal, setShowPdfModal] = useState(false);
 
   const fetchFaq = async () => {
-    if (!id) return;
-    const faq = await getFaq(id as string);
+    const faq = await getFaq();
     setFaq(faq);
   };
 
@@ -155,13 +154,9 @@ export default function FlagshipDetails() {
       {/* Sticky Register Button */}
       {isButtonVisible && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-white max-w-md mx-auto">
-          <div className="px-4 py-2">
+          <div className="p-1">
             <button
-              onClick={() =>
-                router.push(
-                  `/flagship/flagship-requirement?id=${id}&fromDetailsPage=true`
-                )
-              }
+              onClick={() => router.push(`/flagship/flagship-requirement?id=${id}&fromDetailsPage=true`)}
               className="w-full py-3 bg-orange-500 text-[#2B2D42] font-semibold rounded-md"
             >
               Register
@@ -256,11 +251,7 @@ export default function FlagshipDetails() {
 
         {/* Register Button */}
         <button
-          onClick={() =>
-            router.push(
-              `/flagship/flagship-requirement?id=${id}&fromDetailsPage=true`
-            )
-          }
+          onClick={() => router.push(`/flagship/flagship-requirement?id=${id}&fromDetailsPage=true`)}
           className="w-full py-3 bg-orange-500 text-[#2B2D42] font-semibold rounded-md mb-3"
         >
           Register
@@ -279,28 +270,28 @@ export default function FlagshipDetails() {
           <h3 className="text-lg font-medium mb-2">Time left to register</h3>
           <div className="flex justify-center gap-x-4">
             <div className="flex flex-col items-center">
-              <div className="bg-black text-white w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold">
+              <div className="bg-black text-white w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold">
                 {timeLeft.days}
               </div>
               <span className="text-sm mt-1">Days</span>
             </div>
 
             <div className="flex flex-col items-center">
-              <div className="bg-black text-white w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold">
+              <div className="bg-white text-black w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold border border-black">
                 {timeLeft.hours}
               </div>
               <span className="text-sm mt-1">Hrs</span>
             </div>
 
             <div className="flex flex-col items-center">
-              <div className="bg-black text-white w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold">
+              <div className="bg-white text-black w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold border border-black">
                 {timeLeft.minutes}
               </div>
               <span className="text-sm mt-1">Min</span>
             </div>
 
             <div className="flex flex-col items-center">
-              <div className="bg-black text-white w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold">
+              <div className="bg-white text-black w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold border border-black">
                 {timeLeft.seconds}
               </div>
               <span className="text-sm mt-1">Sec</span>
@@ -327,11 +318,11 @@ export default function FlagshipDetails() {
               {rating.map((review: any, index: number) => (
                 <div key={index} className="flex-shrink-0 w-72">
                   <ReviewCard
-                    name={review.userId.fullName}
-                    location={review.flagshipId.destination}
-                    rating={review.rating}
-                    eventName={review.flagshipId.tripName}
-                    comment={review.review}
+                    name={review?.userId?.fullName}
+                    location={review?.flagshipId?.destination}
+                    rating={review?.rating}
+                    eventName={review?.flagshipId?.tripName}
+                    comment={review?.review}
                   />
                 </div>
               ))}
@@ -416,9 +407,9 @@ export default function FlagshipDetails() {
             )}
             <button
               onClick={() => handleSubmitQuery()}
-              className="w-full py-3 border-2 border-black text-black font-semibold rounded-lg"
+              className={`w-full py-3 border-2 text-black font-semibold rounded-lg ${queryText.length > 0 ? "bg-orange-500 text-[#2B2D42]" : "border-black"}`}
             >
-              Trip Query Button
+              {queryText.length > 0 ? "Send Trip Query" : "Trip Query Button"}
             </button>
           </div>
         </div>

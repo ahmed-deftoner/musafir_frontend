@@ -36,8 +36,8 @@ function UserSettings() {
   }
 
   return (
-    <div className='min-h-screen w-full bg-gray-50 md:flex md:items-center md:justify-center p-0'>
-      <div className='bg-white w-full max-w-md mx-auto rounded-lg shadow-sm h-screen'>
+    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
+      <div className='bg-white w-full max-w-md mx-auto rounded-lg h-screen'>
         <Navigation />
 
         <div className='flex-1 flex flex-col overflow-hidden'>

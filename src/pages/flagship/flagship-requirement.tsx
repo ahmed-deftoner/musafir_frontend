@@ -1,27 +1,24 @@
-import { useState, useEffect } from "react";
-import { Check, ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import useCustomHook from "@/hooks/useFlagshipHandler";
-import { BaseRegistration } from "@/interfaces/registration";
-import { showAlert } from "../alert";
-import Image from "next/image";
-import withAuth from "@/hoc/withAuth";
-import { ROLES } from "@/config/constants";
+import { useState, useEffect } from 'react'
+import { Check, ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import useCustomHook from '@/hooks/useFlagshipHandler';
+import { BaseRegistration } from '@/interfaces/registration';
+import { showAlert } from '../alert';
+import Image from 'next/image';
+import withAuth from '@/hoc/withAuth';
+import { ROLES } from '@/config/constants';
+import useRegistrationHook from '@/hooks/useRegistrationHandler';
 
 function FlagshipRequirements() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [tripType, setTripType] = useState<"solo" | "group" | "partner">(
-    "solo"
-  );
-  const [city, setCity] = useState("");
-  const [tiers, setTiers] = useState("");
-  const [sleepPreference, setSleepPreference] = useState<"mattress" | "bed">(
-    "mattress"
-  );
-  const [roomSharing, setRoomSharing] = useState<"default" | "twin">("default");
-  const [groupMembers, setGroupMembers] = useState("");
-  const [expectations, setExpectations] = useState("");
+  const [tripType, setTripType] = useState<'solo' | 'group' | 'partner'>('solo')
+  const [city, setCity] = useState('')
+  const [tiers, setTiers] = useState('');
+  const [sleepPreference, setSleepPreference] = useState<'mattress' | 'bed'>('mattress');
+  const [roomSharing, setRoomSharing] = useState<'default' | 'twin'>('default');
+  const [groupMembers, setGroupMembers] = useState('')
+  const [expectations, setExpectations] = useState('')
   const action = useCustomHook();
   const [flagship, setFlagship] = useState<any>();
   const [price, setPrice] = useState(0);
@@ -30,6 +27,7 @@ function FlagshipRequirements() {
   const [fromDetailsPage, setFromDetailsPage] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedRoomSharingPrice, setSelectedRoomSharingPrice] = useState(0);
+  const registrationAction = useRegistrationHook();
 
   const getFlagship = async (flagshipId: any) => {
     const response = await action.getFlagship(flagshipId);
@@ -60,12 +58,11 @@ function FlagshipRequirements() {
     }
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (flagship._id) {
       const registration: BaseRegistration = {
         flagshipId: flagship._id,
-        userId: "123123",
         isPaid: false,
         joiningFromCity: city,
         tier: tiers,
@@ -77,17 +74,20 @@ function FlagshipRequirements() {
         price,
       };
 
-      localStorage.setItem("registration", JSON.stringify(registration));
-      fromDetailsPage
-        ? router.push("/flagship/seats")
-        : router.push("/signup/additionalinfo");
+      if(fromDetailsPage){
+        const { registrationId, message } = await registrationAction.create(registration) as { registrationId: string, message: string };
+        localStorage.setItem("registrationId", JSON.stringify(registrationId));
+        router.push(`/flagship/seats`);
+      } else{
+        localStorage.setItem("registration", JSON.stringify(registration));
+        router.push("/signup/additionalinfo");
+      }
     } else {
       showAlert("Flagship not found.", "error");
     }
   };
 
-  const imageUrls =
-    flagship?.images && flagship?.images.length > 0 ? flagship?.images : [];
+  const imageUrls = flagship?.images && flagship?.images.length > 0 ? flagship?.images : [];
 
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -96,9 +96,7 @@ function FlagshipRequirements() {
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? imageUrls.length - 1 : prev - 1
-    );
+    setCurrentImageIndex((prev) => (prev === 0 ? imageUrls.length - 1 : prev - 1));
   };
 
   return (
@@ -107,70 +105,57 @@ function FlagshipRequirements() {
         {/* Header */}
         <div className="">
           {/* Progress Steps */}
-          {!fromDetailsPage && (
-            <div className="p-4 border-b">
-              <div className="flex items-center mb-6">
-                <button className="p-2 hover:bg-gray-100 rounded-full mr-auto">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
-                <h1 className="text-xl font-semibold text-center flex-grow">
-                  Onboarding
-                </h1>
+          {!fromDetailsPage && <div className="p-4 border-b">
+            <div className="flex items-center mb-6">
+              <button className="p-2 hover:bg-gray-100 rounded-full mr-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+              <h1 className="text-xl font-semibold text-center flex-grow">Onboarding</h1>
+            </div>
+
+
+            {/* Progress Steps */}
+            <div className="flex items-center justify-between mb-3 relative">
+              {/* Step 1 */}
+              <div className="flex flex-col items-center z-10">
+                <div className="w-10 h-10 rounded-full bg-[#F3F3F3] text-[#A6A6A6] flex items-center justify-center text-sm">
+                  1
+                </div>
+                <span className="mt-2 text-sm font-medium">Basic</span>
               </div>
 
-              {/* Progress Steps */}
-              <div className="flex items-center justify-between mb-3 relative">
-                {/* Step 1 */}
+              {/* Line (centered absolutely) */}
+              <div className="absolute left-6 right-6 top-1/4 transform -translate-y-1/2 z-0">
+                <div className="w-full h-0.5 bg-[#F3F3F3]" />
+              </div>
+
+              {/* Step 2 (conditionally rendered) */}
+              <>
                 <div className="flex flex-col items-center z-10">
-                  <div className="w-10 h-10 rounded-full bg-[#F3F3F3] text-[#A6A6A6] flex items-center justify-center text-sm">
-                    1
+                  <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm">
+                    2
                   </div>
-                  <span className="mt-2 text-sm font-medium">Basic</span>
+                  <span className="mt-2 text-sm text-gray-600">Flagship</span>
                 </div>
+              </>
 
-                {/* Line (centered absolutely) */}
-                <div className="absolute left-6 right-6 top-1/4 transform -translate-y-1/2 z-0">
-                  <div className="w-full h-0.5 bg-[#F3F3F3]" />
+              {/* Step 3 */}
+              <div className="flex flex-col items-center z-10">
+                <div className="w-10 h-10 rounded-full bg-[#F3F3F3] text-[#A6A6A6] flex items-center justify-center text-sm">
+                  3
                 </div>
-
-                {/* Step 2 (conditionally rendered) */}
-                <>
-                  <div className="flex flex-col items-center z-10">
-                    <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm">
-                      2
-                    </div>
-                    <span className="mt-2 text-sm text-gray-600">Flagship</span>
-                  </div>
-                </>
-
-                {/* Step 3 */}
-                <div className="flex flex-col items-center z-10">
-                  <div className="w-10 h-10 rounded-full bg-[#F3F3F3] text-[#A6A6A6] flex items-center justify-center text-sm">
-                    3
-                  </div>
-                  <span className="mt-2 text-sm text-gray-600">Background</span>
-                </div>
+                <span className="mt-2 text-sm text-gray-600">Background</span>
               </div>
             </div>
-          )}
+          </div>}
         </div>
 
         <div className="relative h-52 w-full">
           <Image
             src={imageUrls[currentImageIndex]}
-            alt={flagship?.tripName || "Event image"}
+            alt={flagship?.tripName || 'Event image'}
             fill
             className="object-cover"
           />
@@ -194,11 +179,8 @@ function FlagshipRequirements() {
                 {imageUrls.map((_: string, index: number) => (
                   <div
                     key={index}
-                    className={`h-1.5 rounded-full transition-all ${
-                      currentImageIndex === index
-                        ? "w-4 bg-white"
-                        : "w-1.5 bg-white/60"
-                    }`}
+                    className={`h-1.5 rounded-full transition-all ${currentImageIndex === index ? 'w-4 bg-white' : 'w-1.5 bg-white/60'
+                      }`}
                   />
                 ))}
               </div>
@@ -241,9 +223,8 @@ function FlagshipRequirements() {
                   location.enabled && (
                     <label
                       key={index}
-                      className={`flex items-center space-x-2 ${
-                        city === location.name ? "text-black" : "text-gray-600"
-                      }`}
+                      className={`flex items-center space-x-2 ${city === location.name ? "text-black" : "text-gray-600"
+                        }`}
                     >
                       <input
                         type="radio"
@@ -278,39 +259,28 @@ function FlagshipRequirements() {
                 Package/Ticket
               </label>
               {flagship?.tiers?.length > 0 ? (
-                flagship.tiers.map(
-                  (tier: { name: string; price: string }, index: number) => (
-                    <label
-                      key={index}
-                      className={`flex items-center space-x-2 ${
-                        tiers === tier.name ? "text-black" : "text-gray-600"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="tier"
-                        value={tier.name}
-                        checked={tiers === tier.name}
-                        onChange={() => {
-                          if (tiers && selectedTierPrice > 0) {
-                            setPrice(
-                              (prevPrice) => prevPrice - selectedTierPrice
-                            );
-                          }
-                          setTiers(tier.name);
-                          const newTierPrice = Number(tier.price);
-                          setSelectedTierPrice(newTierPrice);
-                          setPrice((prevPrice) => prevPrice + newTierPrice);
-                        }}
-                        className="sr-only peer"
-                      />
-                      <div className="w-4 h-4 rounded-full border border-gray-300 peer-checked:border-4 peer-checked:border-black"></div>
-                      <span>
-                        {tier.name} Rs.{tier.price}
-                      </span>
-                    </label>
-                  )
-                )
+                flagship.tiers.map((tier: { name: string; price: string }, index: number) => (
+                  <label key={index} className={`flex items-center space-x-2 ${tiers === tier.name ? 'text-black' : 'text-gray-600'}`}>
+                    <input
+                      type="radio"
+                      name="tier"
+                      value={tier.name}
+                      checked={tiers === tier.name}
+                      onChange={() => {
+                        if (tiers && selectedTierPrice > 0) {
+                          setPrice(prevPrice => prevPrice - selectedTierPrice);
+                        }
+                        setTiers(tier.name);
+                        const newTierPrice = Number(tier.price);
+                        setSelectedTierPrice(newTierPrice);
+                        setPrice(prevPrice => prevPrice + newTierPrice);
+                      }}
+                      className="sr-only peer"
+                    />
+                    <div className="w-4 h-4 rounded-full border border-gray-300 peer-checked:border-4 peer-checked:border-black"></div>
+                    <span>{tier.name} Rs.{tier.price}</span>
+                  </label>
+                ))
               ) : (
                 <label className="flex items-center space-x-2 text-black">
                   <input
@@ -338,11 +308,7 @@ function FlagshipRequirements() {
               <label htmlFor="package" className="block text-sm font-medium">
                 Room sharing preference
               </label>
-              <label
-                className={`flex items-center space-x-2 ${
-                  roomSharing === "default" ? "text-black" : "text-gray-600"
-                }`}
-              >
+              <label className={`flex items-center space-x-2 ${roomSharing === "default" ? 'text-black' : 'text-gray-600'}`}>
                 <input
                   type="radio"
                   name="roomSharing"
@@ -350,11 +316,9 @@ function FlagshipRequirements() {
                   checked={roomSharing === "default"}
                   onChange={() => {
                     if (roomSharing !== "default") {
-                      setPrice(
-                        (prevPrice) => prevPrice - selectedRoomSharingPrice
-                      );
+                      setPrice(prevPrice => prevPrice - selectedRoomSharingPrice);
                     }
-                    setRoomSharing("default");
+                    setRoomSharing('default');
                     setSelectedRoomSharingPrice(0);
                   }}
                   className="sr-only peer"
@@ -362,58 +326,28 @@ function FlagshipRequirements() {
                 <div className="w-4 h-4 rounded-full border border-gray-300 peer-checked:border-4 peer-checked:border-black"></div>
                 <span>Default (3-4 sharing)</span>
               </label>
-              {flagship?.roomSharingPreference?.map(
-                (
-                  preference: { name: string; price: string },
-                  index: number
-                ) => (
-                  <label
-                    key={index}
-                    className={`flex items-center space-x-2 ${
-                      roomSharing === preference.name
-                        ? "text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="roomSharing"
-                      value={preference.name}
-                      checked={
-                        roomSharing ===
-                        (preference.name === "Twin Sharing"
-                          ? "twin"
-                          : "default")
+              {flagship?.roomSharingPreference?.map((preference: { name: string; price: string }, index: number) => (
+                <label key={index} className={`flex items-center space-x-2 ${roomSharing === preference.name ? 'text-black' : 'text-gray-600'}`}>
+                  <input
+                    type="radio"
+                    name="roomSharing"
+                    value={preference.name}
+                    checked={roomSharing === (preference.name === "Twin Sharing" ? "twin" : "default")}
+                    onChange={() => {
+                      if (roomSharing === "default") {
+                        setPrice(prevPrice => prevPrice + Number(preference.price));
+                      } else if (roomSharing !== preference.name) {
+                        setPrice(prevPrice => prevPrice - selectedRoomSharingPrice + Number(preference.price));
                       }
-                      onChange={() => {
-                        if (roomSharing === "default") {
-                          setPrice(
-                            (prevPrice) => prevPrice + Number(preference.price)
-                          );
-                        } else if (roomSharing !== preference.name) {
-                          setPrice(
-                            (prevPrice) =>
-                              prevPrice -
-                              selectedRoomSharingPrice +
-                              Number(preference.price)
-                          );
-                        }
-                        setRoomSharing(
-                          preference.name === "Twin Sharing"
-                            ? "twin"
-                            : "default"
-                        );
-                        setSelectedRoomSharingPrice(Number(preference.price));
-                      }}
-                      className="sr-only peer"
-                    />
-                    <div className="w-4 h-4 rounded-full border border-gray-300 peer-checked:border-4 peer-checked:border-black"></div>
-                    <span>
-                      {preference.name} (+ Rs.{preference.price})
-                    </span>
-                  </label>
-                )
-              )}
+                      setRoomSharing(preference.name === "Twin Sharing" ? "twin" : "default");
+                      setSelectedRoomSharingPrice(Number(preference.price));
+                    }}
+                    className="sr-only peer"
+                  />
+                  <div className="w-4 h-4 rounded-full border border-gray-300 peer-checked:border-4 peer-checked:border-black"></div>
+                  <span>{preference.name} (+ Rs.{preference.price})</span>
+                </label>
+              ))}
             </div>
 
             {/* Sleeping preference */}
@@ -422,9 +356,8 @@ function FlagshipRequirements() {
                 Sleeping preference
               </label>
               <label
-                className={`flex items-center space-x-2 ${
-                  sleepPreference == "mattress" ? "text-black" : "text-gray-600"
-                }`}
+                className={`flex items-center space-x-2 ${sleepPreference == "mattress" ? "text-black" : "text-gray-600"
+                  }`}
               >
                 <input
                   type="radio"
@@ -445,9 +378,8 @@ function FlagshipRequirements() {
                 <span>Mattress (Rs. 0)</span>
               </label>
               <label
-                className={`flex items-center space-x-2 ${
-                  sleepPreference == "bed" ? "text-black" : "text-gray-600"
-                }`}
+                className={`flex items-center space-x-2 ${sleepPreference == "bed" ? "text-black" : "text-gray-600"
+                  }`}
               >
                 <input
                   type="radio"
@@ -456,18 +388,14 @@ function FlagshipRequirements() {
                   checked={sleepPreference === "bed"}
                   onChange={() => {
                     if (sleepPreference == "mattress") {
-                      setPrice(
-                        price + Number(flagship?.mattressTiers?.[0]?.price || 0)
-                      );
+                      setPrice(price + Number(flagship?.mattressTiers?.[0]?.price || 0));
                     }
                     setSleepPreference("bed");
                   }}
                   className="sr-only peer"
                 />
                 <div className="w-4 h-4 rounded-full border border-gray-300 peer-checked:border-4 peer-checked:border-black"></div>
-                <span>
-                  Bed (+ Rs.{flagship?.mattressTiers?.[0]?.price || 0})
-                </span>
+                <span>Bed (+ Rs.{flagship?.mattressTiers?.[0]?.price || 0})</span>
               </label>
             </div>
 
@@ -477,9 +405,8 @@ function FlagshipRequirements() {
                 Who are you joining with
               </label>
               <label
-                className={`flex items-center space-x-2 ${
-                  tripType == "solo" ? "text-black" : "text-gray-600"
-                }`}
+                className={`flex items-center space-x-2 ${tripType == "solo" ? "text-black" : "text-gray-600"
+                  }`}
               >
                 <input
                   type="radio"
@@ -493,9 +420,8 @@ function FlagshipRequirements() {
                 <span>Solo</span>
               </label>
               <label
-                className={`flex items-center space-x-2 ${
-                  tripType == "group" ? "text-black" : "text-gray-600"
-                }`}
+                className={`flex items-center space-x-2 ${tripType == "group" ? "text-black" : "text-gray-600"
+                  }`}
               >
                 <input
                   type="radio"
@@ -509,9 +435,8 @@ function FlagshipRequirements() {
                 <span>Group</span>
               </label>
               <label
-                className={`flex items-center space-x-2 ${
-                  tripType == "partner" ? "text-black" : "text-gray-600"
-                }`}
+                className={`flex items-center space-x-2 ${tripType == "partner" ? "text-black" : "text-gray-600"
+                  }`}
               >
                 <input
                   type="radio"
@@ -601,6 +526,5 @@ function FlagshipRequirements() {
   );
 }
 
-export default withAuth(FlagshipRequirements, {
-  allowedRoles: [ROLES.MUSAFIR],
-});
+export default withAuth(FlagshipRequirements, { allowedRoles: [ROLES.MUSAFIR] });
+

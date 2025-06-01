@@ -1,6 +1,5 @@
 export interface BaseRegistration {
     flagshipId: string;
-    userId: string;
     paymentId?: string;
     isPaid?: boolean;
     joiningFromCity: string;

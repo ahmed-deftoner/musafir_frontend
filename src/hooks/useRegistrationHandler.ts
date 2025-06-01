@@ -8,8 +8,8 @@ const useRegistrationHook = () => {
 
   const create = async (data: BaseRegistration): Promise<unknown> => {
     const res = await api.post(`${REGISTRATION.CREATE}`, data);
-    if (res.statusCode === 201) {
-        return res.data;
+    if (res) {
+      return res;
     }
     return false;
   };
@@ -40,11 +40,20 @@ const useRegistrationHook = () => {
     return false;
   };
 
+  const getRegistrationById = async (registrationId: string): Promise<any> => {
+    const res = await api.get(`${REGISTRATION.GET_REGISTRATION_BY_ID}/${registrationId}`);
+    if (res.statusCode === 200) {
+      return res.data;
+    }
+    return false;
+  };
+
   return {
     create,
     getPastPassport,
     getUpcomingPassport,
     sendReEvaluateRequestToJury,
+    getRegistrationById,
   };
 };
 

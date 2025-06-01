@@ -74,8 +74,8 @@ export default function Login() {
   };
 
   return (
-    <div className='min-h-screen w-full bg-gray-50 md:flex md:items-center md:justify-center p-0'>
-      <div className='bg-white w-full max-w-md mx-auto rounded-lg shadow-sm h-screen p-3 w-full'>
+    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
+      <div className='bg-white max-w-md mx-auto rounded-lg h-screen p-3 w-full'>
         {/* Header */}
         <header className='flex items-center p-4 border-b'>
           <Link href='/' className='p-2 hover:bg-gray-100 rounded-full'>

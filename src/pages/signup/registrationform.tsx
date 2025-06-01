@@ -1,46 +1,36 @@
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function RegistrationForm() {
-  const router = useRouter();
-  const [gender, setGender] = useState("female");
-  const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [flagshipId, setFlagshipId] = useState("");
+  const router = useRouter()
+  const [gender, setGender] = useState('female')
+  const [fullName, setFullName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [flagshipId, setFlagshipId] = useState('');
   const [showWhatsapp, setShowWhatsapp] = useState(false);
-  const [whatsappPhone, setWhatsappPhone] = useState("");
-
+  const [whatsappPhone, setWhatsappPhone] = useState('');
+  
   useEffect(() => {
-    // Save flagshipId on first load
-    if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "flagshipId",
-        JSON.stringify("68211ecb7c873c7fea667449")
-      );
+    const flagshipId = localStorage.getItem('flagshipId');
+    if (flagshipId) {
+      setFlagshipId(JSON.parse(flagshipId));
+    }
 
-      const flagshipId = localStorage.getItem("flagshipId");
-      if (flagshipId) {
-        setFlagshipId(JSON.parse(flagshipId));
-      }
-
-      const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
-      if (savedData) {
-        setGender(savedData?.gender || "");
-        setFullName(savedData?.fullName || "");
-        setPhone(savedData?.phone || "");
-      }
+    const savedData = JSON.parse(localStorage.getItem('formData') || '{}');
+    if (savedData) {
+      setGender(savedData?.gender || '');
+      setFullName(savedData?.fullName || '');
+      setPhone(savedData?.phone || '');
     }
   }, []);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
+    const savedData = JSON.parse(localStorage.getItem('formData') || '{}');
     const formData = { ...savedData, gender, fullName, phone, whatsappPhone };
 
     localStorage.setItem("formData", JSON.stringify(formData));
-    router.push(
-      flagshipId ? "/flagship/flagship-requirement" : "/signup/additionalinfo"
-    );
+    router.push(flagshipId ? '/flagship/flagship-requirement' : '/signup/additionalinfo')
   };
 
   return (
@@ -50,23 +40,11 @@ export default function RegistrationForm() {
         <div className="p-4 border-b">
           <div className="flex items-center mb-6">
             <button className="p-2 hover:bg-gray-100 rounded-full mr-auto">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 6L6 18M6 6l12 12" />
               </svg>
             </button>
-            <h1 className="text-xl font-semibold text-center flex-grow">
-              Onboarding
-            </h1>
+            <h1 className="text-xl font-semibold text-center flex-grow">Onboarding</h1>
           </div>
 
           {/* Progress Steps */}
@@ -109,9 +87,7 @@ export default function RegistrationForm() {
         {/* Form Content */}
         <div className="p-4">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold mb-2 text-[#2B2D42]">
-              Lets get to know you first!
-            </h1>
+            <h1 className="text-2xl font-bold mb-2 text-[#2B2D42]">Lets get to know you first!</h1>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -119,14 +95,11 @@ export default function RegistrationForm() {
             <div className="space-y-2">
               <label className="block text-sm font-medium">Gender</label>
               <div className="flex gap-3">
-                {["male", "female", "other"].map((value) => (
+                {['male', 'female', 'other'].map((value) => (
                   <label
                     key={value}
-                    className={`px-4 py-2 rounded-full cursor-pointer ${
-                      gender === value
-                        ? "bg-black text-white"
-                        : "bg-gray-100 text-gray-900"
-                    }`}
+                    className={`px-4 py-2 rounded-full cursor-pointer ${gender === value ? 'bg-black text-white' : 'bg-gray-100 text-gray-900'
+                      }`}
                   >
                     <input
                       type="radio"
@@ -161,21 +134,10 @@ export default function RegistrationForm() {
                 {fullName && (
                   <button
                     type="button"
-                    onClick={() => setFullName("")}
+                    onClick={() => setFullName('')}
                     className="absolute right-3 top-1/2 -translate-y-1/2"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-gray-400"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400">
                       <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
                   </button>
@@ -189,7 +151,9 @@ export default function RegistrationForm() {
                 Phone
               </label>
               <div className="flex gap-2">
-                <select className="w-[100px] px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                <select
+                  className="w-[100px] px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                >
                   <option value="+92">+92</option>
                 </select>
                 <input
@@ -198,7 +162,7 @@ export default function RegistrationForm() {
                   value={phone}
                   required
                   onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, "");
+                    const value = e.target.value.replace(/\D/g, '');
                     if (value.length <= 10) {
                       setPhone(value);
                     }
@@ -215,7 +179,7 @@ export default function RegistrationForm() {
                 type="checkbox"
                 id="showSecondPhone"
                 onChange={() => {
-                  setShowWhatsapp(!showWhatsapp);
+                  setShowWhatsapp(!showWhatsapp)
                 }}
                 className="mr-2 accent-black"
               />
@@ -224,10 +188,7 @@ export default function RegistrationForm() {
               </label>
             </div>
             <div className="space-y-2">
-              <label
-                htmlFor="secondPhone"
-                className="block text-sm font-medium"
-              >
+              <label htmlFor="secondPhone" className="block text-sm font-medium">
                 Whatsapp
               </label>
               <div className="flex gap-2">
@@ -243,7 +204,7 @@ export default function RegistrationForm() {
                   value={whatsappPhone}
                   required
                   onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, "");
+                    const value = e.target.value.replace(/\D/g, '');
                     if (value.length <= 10) {
                       setWhatsappPhone(value);
                     }
@@ -266,5 +227,6 @@ export default function RegistrationForm() {
         </div>
       </div>
     </div>
-  );
+  )
 }
+

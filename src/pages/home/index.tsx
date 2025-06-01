@@ -24,8 +24,8 @@ function Home() {
   }, []);
 
   return (
-    <div className='min-h-screen w-full bg-gray-50 md:flex md:items-center md:justify-center p-0'>
-      <div className='bg-white w-full max-w-md mx-auto rounded-lg shadow-sm h-screen p-3'>
+    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
+      <div className='bg-white w-full max-w-md mx-auto rounded-lg h-screen p-3'>
         {/* Header */}
         <header className='flex items-center justify-center p-4'>
           <h1 className='text-xl font-semibold'>Home</h1>

@@ -2,8 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FlagshipService } from "@/services/flagshipService";
-import { IRegistration, IUser } from "@/interfaces/trip/trip";
+import { IRegistration } from "@/interfaces/trip/trip";
 import { useRouter } from "next/router";
+import { IUser } from "@/services/types/user";
 
 export const RegistrationsList = () => {
   const [registeredUsers, setRegisteredUsers] = useState<IRegistration[]>([]);

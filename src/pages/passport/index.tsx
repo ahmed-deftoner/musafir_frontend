@@ -36,8 +36,8 @@ function Passport() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 md:flex md:items-center md:justify-center p-0">
-      <div className="bg-white w-full max-w-md mx-auto rounded-lg shadow-sm h-screen">
+    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
+      <div className='bg-white w-full max-w-md mx-auto rounded-lg h-screen'>
         {/* Header */}
         <header className="p-4 flex justify-center">
           <h1 className="text-2xl font-bold">Passport</h1>
@@ -82,6 +82,7 @@ function Passport() {
                   location={event.flagshipId.destination}
                   rating={event.ratingId?.rating}
                   price={event.price}
+                  status={event.status}
                 />
               ))
             : activeTab === "past" && (
@@ -99,19 +100,20 @@ function Passport() {
                 <PassportUpcomingCard
                   key={event._id}
                   registrationId={event._id}
-                  title={event.flagshipId.tripName}
+                  title={event.flagship.tripName}
                   date={formatDate(
-                    event.flagshipId.startDate,
-                    event.flagshipId.endDate
+                    event.flagship.startDate,
+                    event.flagship.endDate
                   )}
                   appliedDate={new Date(event.createdAt).toLocaleDateString()}
-                  location={event.flagshipId.destination}
-                  image={event.flagshipId.image}
+                  location={event.flagship.destination}
+                  image={event.flagship.images[0]}
                   status={event.status}
                   paymentInfo={{
                     amount: event.price,
                     dueAmount: event.amountDue,
                   }}
+                  detailedPlan={event?.flagship?.detailedPlan}
                 />
               ))
             : activeTab === "upcoming" && (

@@ -39,7 +39,7 @@ function PricingPage() {
   // Mattress tier state
   const [mattressTierEnabled, setMattressTierEnabled] = useState(true);
   const [mattressTiers, setMattressTiers] = useState([
-    { id: 2, name: 'Bed Add-On', price: '3,000' },
+    { id: 2, name: 'Bed Add-On', price: '3000' },
   ]);
 
   const [roomSharingEnabled, setRoomSharingEnabled] = useState(true);
@@ -282,8 +282,8 @@ function PricingPage() {
   };
 
   return (
-    <div className='min-h-screen w-full bg-gray-50 md:flex md:items-center md:justify-center p-0'>
-      <div className='bg-white max-w-md mx-auto rounded-lg shadow-sm h-screen p-3 w-full'>
+    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
+      <div className='bg-white max-w-md mx-auto rounded-lg h-screen p-3 w-full'>
         {/* Title */}
         <div className='text-center py-4'>
           <h1 className='text-2xl font-bold'>Create a Flagship</h1>
@@ -387,7 +387,7 @@ function PricingPage() {
                     setIsDirty(true);
                   }}
                   placeholder='Enter location name'
-                  className='w-full py-2 border rounded-lg focus:outline-none px-2'
+                  className='w-full py-2 border rounded-lg focus:outline-none px-2 mx-4'
                   required
                 />
                 <button
@@ -464,7 +464,7 @@ function PricingPage() {
                         setIsDirty(true);
                       }}
                       placeholder='Enter Tier name'
-                      className='w-full py-2 border rounded-lg focus:outline-none px-2'
+                      className='w-full py-2 border rounded-lg focus:outline-none px-2 mx-4'
                       required
                     />
                     <button
@@ -545,7 +545,7 @@ function PricingPage() {
                         setIsDirty(true);
                       }}
                       placeholder='Enter Mattress Tier name'
-                      className='w-full py-2 border rounded-lg focus:outline-none px-2'
+                      className='w-full py-2 border rounded-lg focus:outline-none px-2 mx-4'
                       required
                     />
                     <button

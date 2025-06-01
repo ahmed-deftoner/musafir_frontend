@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,10 @@ import { Camera, ChevronDown, ChevronUp, Copy } from "lucide-react";
 import Image from "next/image";
 import { PaymentService } from "@/services/paymentService";
 import { useToast } from "@/hooks/use-toast";
+import { useParams } from "next/navigation";
+import useRegistrationHook from "@/hooks/useRegistrationHandler";
 import { useRouter } from "next/router";
+import { formatDate } from "@/utils/formatDate";
 
 const bankDetails = {
   "standard-chartered": {
@@ -29,7 +32,8 @@ export default function TripPayment() {
   const [selectedBank, setSelectedBank] =
     useState<string>("standard-chartered");
   const router = useRouter();
-  const { slug } = router.query;
+  const params = useParams();
+  const registrationId = params?.slug as string;
   const [expandedBank, setExpandedBank] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>("");
@@ -37,13 +41,14 @@ export default function TripPayment() {
   const [partialAmount, setPartialAmount] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const registrationHook = useRegistrationHook();
+  const [registration, setRegistration] = useState<any>(null);
 
-  const totalAmount = 26000; // Total amount in rupees
+  const totalAmount = registration?.price;
 
   const handleCopy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      // You might want to add a toast notification here
     } catch (err) {
       console.error("Failed to copy text: ", err);
     }
@@ -70,6 +75,18 @@ export default function TripPayment() {
     e.preventDefault();
   };
 
+  const fetchRegistration = async () => {
+    if (!registrationId) return;
+    const registration = await registrationHook.getRegistrationById(registrationId);
+    if (registration) {
+      setRegistration(registration);
+    };
+  }
+
+  useEffect(() => {
+    fetchRegistration();
+  }, [registrationId]);
+
   const handleSubmit = async () => {
     if (!file) {
       toast({
@@ -90,7 +107,7 @@ export default function TripPayment() {
     try {
       setIsSubmitting(true);
       await PaymentService.createPayment({
-        registration: slug as string,
+        registration: registrationId,
         bankAccount: "680929fef52e643c2a724217",
         paymentType: paymentType === "full" ? "fullPayment" : "partialPayment",
         amount: paymentType === "full" ? totalAmount : partialAmount,
@@ -102,9 +119,8 @@ export default function TripPayment() {
         description: "Payment submitted successfully!",
       });
 
-      // Redirect to home page after 2 seconds
       setTimeout(() => {
-        router.push("/");
+        router.push("/home");
       }, 2000);
     } catch (error) {
       console.error("Payment submission error:", error);
@@ -119,8 +135,8 @@ export default function TripPayment() {
   };
 
   return (
-    <div className="flex justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md">
+     <div className="flex justify-center min-h-screen bg-gray-50">
+      {registrationId && <div className="w-full max-w-md">
         <div className="flex flex-col min-h-screen bg-white">
           {/* Header */}
           <div className="px-4 py-2 text-center">
@@ -130,7 +146,7 @@ export default function TripPayment() {
           {/* Avocado Illustration */}
           <div className="w-full h-48 bg-[#E6E8F5] rounded-lg mx-auto mb-4 overflow-hidden">
             <Image
-              src="/payments-cover.png"
+              src={registration?.flagship?.images.length > 0 ? registration?.flagship?.images[0] : "/payments-cover.png"}
               alt="Payments Cover"
               height={192}
               width={768}
@@ -140,8 +156,8 @@ export default function TripPayment() {
 
           {/* Event Details */}
           <div className="px-4 mb-6">
-            <h2 className="text-2xl font-bold">Firefest 5.0</h2>
-            <p className="text-gray-600">20-22th Nov @ Sharan</p>
+            <h2 className="text-2xl font-bold">{registration?.flagship?.tripName}</h2>
+            <p className="text-gray-600">{formatDate(registration?.flagship?.startDate, registration?.flagship?.endDate)}</p>
           </div>
 
           {/* Price and Payment Type */}
@@ -149,7 +165,7 @@ export default function TripPayment() {
             <div className="flex justify-between items-center mb-4">
               <span className="text-gray-700">Total Amount</span>
               <span className="font-bold text-xl">
-                Rs. {totalAmount.toLocaleString()}
+                Rs. {totalAmount?.toLocaleString()}
               </span>
             </div>
 
@@ -370,11 +386,10 @@ export default function TripPayment() {
           {/* Confirm Payment */}
           <div className="px-4 mt-auto mb-6">
             <Button
-              className={`w-full py-6 ${
-                file
-                  ? "bg-orange-500 text-white hover:bg-blue-700"
-                  : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-              }`}
+              className={`w-full py-6 ${file
+                ? "bg-orange-500 text-white hover:bg-white hover:text-black"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                }`}
               disabled={!file || isSubmitting}
               onClick={handleSubmit}
             >
@@ -382,7 +397,7 @@ export default function TripPayment() {
             </Button>
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

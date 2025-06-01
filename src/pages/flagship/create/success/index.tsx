@@ -76,8 +76,8 @@ function SuccessPage() {
   };
 
   return (
-    <div className='min-h-screen bg-white'>
-      <div className='max-w-4xl mx-auto bg-white'>
+    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
+      <div className='bg-white w-full max-w-md mx-auto rounded-lg h-screen p-3'>
         {/* Title */}
         <div className='text-center py-4'>
           <h1 className='text-2xl font-bold'>Flagship Created</h1>
@@ -98,9 +98,8 @@ function SuccessPage() {
               <div className='flex-1 font-medium truncate'>{shareLink}</div>
               <button
                 onClick={copyToClipboard}
-                className={`font-bold flex items-center gap-2 ${
-                  !isPublic ? 'text-gray-500' : 'text-orange-500'
-                }`}
+                className={`font-bold flex items-center gap-2 ${!isPublic ? 'text-gray-500' : 'text-orange-500'
+                  }`}
                 disabled={!isPublic}
               >
                 <Copy className='w-4 h-4' />
@@ -114,14 +113,12 @@ function SuccessPage() {
             <h3 className='text-xl font-bold'>Make trip open to public</h3>
             <button
               onClick={handleToggle}
-              className={`w-14 h-7 rounded-full p-1 transition-colors duration-200 ${
-                isPublic ? 'bg-black' : 'bg-gray-300'
-              }`}
+              className={`w-14 h-7 rounded-full p-1 transition-colors duration-200 ${isPublic ? 'bg-black' : 'bg-gray-300'
+                }`}
             >
               <div
-                className={`w-5 h-5 rounded-full bg-white transform transition-transform duration-200 ${
-                  isPublic ? 'translate-x-7' : ''
-                }`}
+                className={`w-5 h-5 rounded-full bg-white transform transition-transform duration-200 ${isPublic ? 'translate-x-7' : ''
+                  }`}
               />
             </button>
           </div>
@@ -129,11 +126,11 @@ function SuccessPage() {
         </div>
 
         {/* Back to Home Button */}
-        <div className='fixed bottom-0 left-0 right-0 px-4 py-4 bg-white border-t'>
-          <div className='max-w-4xl mx-auto'>
+        <div className='fixed bottom-0 left-0 right-0 px-4 py-4 bg-white'>
+          <div className='max-w-md mx-auto'>
             <button
               onClick={handleHome}
-              className='w-full bg-white text-black py-4 rounded-xl font-bold text-lg border-2 border-gray-200 relative'
+              className='w-full bg-white text-black hover:bg-[#FF9000] py-4 rounded-xl font-bold text-lg border-2 border-gray-200 relative'
             >
               Back to home
             </button>

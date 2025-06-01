@@ -186,8 +186,8 @@ function SeatsAllocation() {
   if (!mounted) return null; // avoid hydration issues
 
   return (
-    <div className='min-h-screen w-full bg-gray-50 md:flex md:items-center md:justify-center p-0'>
-      <div className='bg-white w-full max-w-md mx-auto rounded-lg shadow-sm h-screen p-3 w-full'>
+    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
+      <div className='bg-white max-w-md mx-auto rounded-lg h-screen p-3 w-full'>
         {/* Title */}
         <div className='text-center py-4'>
           <h1 className='text-2xl font-bold'>Create a Flagship</h1>
@@ -302,7 +302,7 @@ function SeatsAllocation() {
               max='100'
               value={bedMattressSplit}
               onChange={(e) => setBedMattressSplit(Number.parseInt(e.target.value))}
-              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer'
+              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-black'
             />
             <div className='flex justify-between mt-4 gap-4'>
               <div className='flex-1'>

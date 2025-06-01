@@ -8,7 +8,7 @@ export const ROUTES_CONSTANTS = {
   SIGNUP: '/signup',
   FORGOT_PASSWORD: '/forgot-password',
   VERIFICATION_REQUEST: '/verification',
-  ADMIN_DASHBOARD: '/dashboard',
+  ADMIN_DASHBOARD: '/admin',
   HOME: '/home',
   FLAGSHIP: {
     CREATE: '/flagship/create',

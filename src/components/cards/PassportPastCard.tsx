@@ -8,9 +8,10 @@ interface PassportPastCardProps {
   location: string;
   rating?: number;
   price: number;
+  status: string;
 }
 
-const PassportPastCard: React.FC<PassportPastCardProps> = ({ registrationId, title, date, location, rating, price }) => {
+const PassportPastCard: React.FC<PassportPastCardProps> = ({ registrationId, title, date, location, rating, price, status }) => {
   const router = useRouter();
 
   return (
@@ -24,9 +25,14 @@ const PassportPastCard: React.FC<PassportPastCardProps> = ({ registrationId, tit
           You Rated {rating} out of 10
         </p>
       ) : (
-        <button
-          className="mt-2 text-sm bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded-[20px]"
-          onClick={() => router.push({
+        status === "refunded" ? (
+          <p className="mt-2 text-sm">
+            Refunded
+          </p>
+        ) : (
+          <button
+            className="mt-2 text-sm bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded-[20px]"
+            onClick={() => router.push({
             pathname: '/feedback',
             query: {
               registrationId: registrationId,
@@ -37,7 +43,7 @@ const PassportPastCard: React.FC<PassportPastCardProps> = ({ registrationId, tit
         >
           Give Feedback
         </button>
-      )}
+      ))}
     </div>
   );
 };

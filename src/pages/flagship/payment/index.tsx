@@ -29,7 +29,7 @@ function PaymentOptions() {
     {
       id: '1',
       name: 'Standard Chartered',
-      logo: '/placeholder.svg?height=40&width=40',
+      logo: '/sc.png',
       accountNumber: '1234-5678-9012-3456',
       accountTitle: 'John Doe',
       branch: 'Main Branch, City Center',
@@ -37,7 +37,7 @@ function PaymentOptions() {
     {
       id: '2',
       name: "Ali's Standard Charte",
-      logo: '/placeholder.svg?height=40&width=40',
+      logo: '/db.png',
       accountNumber: '9876-5432-1098-7654',
       accountTitle: 'Ali Ahmed',
       branch: 'Downtown Branch',
@@ -92,8 +92,8 @@ function PaymentOptions() {
   };
 
   return (
-    <div className='min-h-screen w-full bg-gray-50 md:flex md:items-center md:justify-center p-0'>
-      <div className='bg-white w-full max-w-md mx-auto rounded-lg shadow-sm h-screen p-3 w-full'>
+    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
+      <div className='bg-white max-w-md mx-auto rounded-lg h-screen p-3 w-full'>
         {/* Title */}
         <div className='text-center py-4'>
           <h1 className='text-2xl font-bold'>Create a Flagship</h1>

@@ -40,14 +40,15 @@ export default function AdditionalInfo() {
       ...savedData, university, cnic, socialLink, city, employmentStatus
     }
     localStorage.setItem('formData', JSON.stringify(formData));
+    
     const payload: BaseUser = { ...formData };
     const { userId, verificationId } = await action.register(payload) as { userId: string, verificationId: string };
-    if(flagshipId){
-      const registrationString = localStorage.getItem("registration");
-      const registration = registrationString ? JSON.parse(registrationString) : {};
-      registration.userId = userId;
+    
+    const registration = JSON.parse(localStorage.getItem('registration') || '{}');
+    registration.userId = userId;
+    if(registration){
       const { registrationId, message } = await registrationAction.create(registration) as { registrationId: string, message: string };
-      localStorage.setItem("registrationId", JSON.stringify(registrationId))
+      localStorage.setItem("registrationId", JSON.stringify(registrationId));
     }
 
     const storeData = {

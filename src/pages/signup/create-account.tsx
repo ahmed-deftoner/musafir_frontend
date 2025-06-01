@@ -27,21 +27,21 @@ export default function CreateAccount() {
 
   const handleGoogleSignIn = async () => {
     // Initiate Google sign-in with a redirect state
-    // const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
+    const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     await signIn("google", {
       callbackUrl: "/login", // Redirect after login
-      // cnic: savedData?.cnic || '',
-      // fullName: savedData?.fullName || '',
-      // gender: savedData?.gender || '',
-      // phone: savedData?.phone || '',
-      // socialLink: savedData?.socialLink || '',
-      // university: savedData?.university || ''
+      cnic: savedData?.cnic || '',
+      fullName: savedData?.fullName || '',
+      gender: savedData?.gender || '',
+      phone: savedData?.phone || '',
+      socialLink: savedData?.socialLink || '',
+      university: savedData?.university || ''
     });
   };
 
   return (
     <div className="min-h-screen w-full bg-gray-50 md:flex md:items-center md:justify-center p-0">
-      <div className="bg-white w-full max-w-md mx-auto rounded-lg shadow-sm h-screen p-3 w-full">
+      <div className="bg-white w-full max-w-md mx-auto rounded-lg shadow-sm h-screen p-3">
         {/* Header */}
         <header className="flex items-center p-4 border-b">
           <Link href="/" className="p-2 hover:bg-gray-100 rounded-full">

@@ -27,8 +27,8 @@ export default function SetPassword() {
   };
 
   return (
-    <div className='min-h-screen bg-gray-50 md:flex md:items-center md:justify-center p-4'>
-      <div className='bg-white w-full max-w-md mx-auto rounded-lg shadow-sm'>
+    <div className='min-h-screen bg-white md:flex md:items-center md:justify-center p-4'>
+      <div className='bg-white w-full max-w-md mx-auto rounded-lg'>
         {/* Header */}
         <header className='flex items-center p-4 border-b'>
           <Link href='signup/create-account' className='p-2 hover:bg-gray-100 rounded-full'>
