@@ -110,7 +110,7 @@ function UserSettings() {
                 <input
                   type='text'
                   name='verificationStatus'
-                  value={userData.verification.status ? 'Verified' : 'Un-Verified'}
+                  value={userData.verification.status}
                   disabled
                   className='w-full px-3 py-2 border rounded-md disabled:bg-gray-100'
                 />
