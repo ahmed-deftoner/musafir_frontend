@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
@@ -14,22 +14,16 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const verifyUser = async () => {
     try {
       const userData: User = await actionLogin.verifyToken(); // Call API
-      // if (userData?.roles?.includes(ROLES.ADMIN)) {
-      //   router.push(ROUTES_CONSTANTS.ADMIN_DASHBOARD);
-      // } else if (userData.roles?.includes(ROLES.MUSAFIR)) {
-      //   if (!userData.verification?.status && !userData.verification?.VerificationRequestDate) {
-      //     router.push(ROUTES_CONSTANTS.VERIFICATION_REQUEST);
-      //   } else {
-      //     router.push(ROUTES_CONSTANTS.HOME);
-      //   }
-      // }
-
-      router.push(ROUTES_CONSTANTS.HOME);
-
+      if (userData?.roles?.includes(ROLES.ADMIN)) {
+        router.push(ROUTES_CONSTANTS.ADMIN_DASHBOARD);
+      } else if (userData.roles?.includes(ROLES.MUSAFIR)) {
+        router.push(ROUTES_CONSTANTS.HOME);
+      }
     } catch (error) {
       console.error('Token verification failed', error);
       router.push('/login'); // Redirect to login if token invalid
@@ -38,6 +32,7 @@ export default function Login() {
 
   useEffect(() => {
     if (session) {
+      console.log("session: ", session);
       // router.push('/home'); // Redirect logged-in users to home
     }
   }, [session, router]);
@@ -109,14 +104,35 @@ export default function Login() {
               <label htmlFor='password' className='block text-sm font-medium'>
                 Password
               </label>
-              <input
+              {/* <input
                 type='password'
                 id='password'
                 placeholder='Enter your password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400'
-              />
+              /> */}
+               <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Your Password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-500" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-500" />
+                  )}
+                </button>
+              </div>
               {error && <p style={{ color: 'red' }}>{error}</p>}
             </div>
 

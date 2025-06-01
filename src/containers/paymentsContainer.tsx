@@ -122,7 +122,7 @@ export function PaymentsContainer({
                 <div className="flex justify-between">
                   <span className="text-gray-600">Bank</span>
                   <span className="font-medium">
-                    {(item.bankAccount as IBankAccount).bankName}
+                    {(item?.bankAccount as IBankAccount)?.bankName}
                   </span>
                 </div>
                 <div className="flex justify-between">

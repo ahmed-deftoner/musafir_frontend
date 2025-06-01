@@ -22,15 +22,14 @@ const useLoginHook = () => {
   };
 
   const verifyToken = async (): Promise<User> => {
-    const user = await api.get(`${TOKEN_VERIFY}`);
-    console.log(user);
-    if (user?.status !== 200) {
+    const res = await api.get(`${TOKEN_VERIFY}`);
+    if (res?.status !== 200) {
       router.push('/login');
     }
-    if (user && user.status && user.status === 200) {
-      setUser(user.data);
+    if (res && res.status && res.status === 200) {
+      setUser(res.data);
     }
-    return user.data;
+    return res.data;
   };
 
   return {

@@ -1,7 +1,7 @@
 // "use client"
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { X } from "lucide-react"
+import { X, Eye, EyeOff } from "lucide-react"
 import useCustomHook from '@/hooks/useSignUp';
 import {
   signIn,
@@ -12,6 +12,7 @@ export default function EmailVerification() {
   const router = useRouter();
   const action = useCustomHook();
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSkipVerification = async (e: any) => {
     e.preventDefault();
@@ -41,7 +42,7 @@ export default function EmailVerification() {
 
       //this first routes to the home page and then to  the verification page need to figure it out
       router.push("/verification");
-    } else{
+    } else {
       //throw error over here that request failed, 
     }
 
@@ -74,14 +75,27 @@ export default function EmailVerification() {
               <label htmlFor="social" className="block text-sm font-medium mt-5">
                 Password
               </label>
-              <input
-                type="text"
-                id="social"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter Password"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="social"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-500" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-500" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className='space-y-3'>

@@ -20,8 +20,10 @@ import { TripsContainer } from "@/containers/tripsContainer";
 import { UsersContainer } from "@/containers/usersContainer";
 import { PaymentsContainer } from "@/containers/paymentsContainer";
 import { RefundsContainer } from "@/containers/refundsContainer";
+import withAuth from "@/hoc/withAuth";
+import { ROLES } from "@/config/constants";
 
-export default function AdminMainPage() {
+function AdminMainPage() {
   const [activeTab, setActiveTab] = useState("trips");
   const [activeSection, setActiveSection] = useState("past");
   const [trips, setTrips] = useState<{
@@ -353,3 +355,5 @@ export default function AdminMainPage() {
     </div>
   );
 }
+
+export default withAuth(AdminMainPage, { allowedRoles: [ROLES.ADMIN] });
