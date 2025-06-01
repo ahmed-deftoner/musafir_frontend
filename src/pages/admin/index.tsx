@@ -22,8 +22,10 @@ import { PaymentsContainer } from "@/containers/paymentsContainer";
 import { RefundsContainer } from "@/containers/refundsContainer";
 import withAuth from "@/hoc/withAuth";
 import { ROLES } from "@/config/constants";
+import { useRouter } from "next/navigation";
 
 function AdminMainPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("trips");
   const [activeSection, setActiveSection] = useState("past");
   const [trips, setTrips] = useState<{
@@ -53,7 +55,8 @@ function AdminMainPage() {
     completed: [],
     refunds: [],
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingCreateFlagship, setLoadingCreateFlagship] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -212,6 +215,7 @@ function AdminMainPage() {
         </Tabs>
 
         {activeTab === "trips" && (
+          <>
           <div className="grid grid-cols-3 border-b">
             <button
               className={cn(
@@ -241,6 +245,19 @@ function AdminMainPage() {
               Upcoming
             </button>
           </div>
+          <div className="flex flex-row items-center justify-center p-4">
+            <button 
+            className="bg-orange-500 text-white px-4 py-2 rounded-md w-full hover:bg-white hover:text-gray-700 hover:border-[1px] hover:border-gray-300"
+            onClick={() => {
+              setLoadingCreateFlagship(true);
+              router.push("/flagship/create");
+            }}
+            disabled={loadingCreateFlagship}
+            >
+              {loadingCreateFlagship ? "Opening Create Flagship" : "Create Flagship"}
+            </button>
+          </div>
+          </>
         )}
 
         {activeTab === "users" && (
@@ -258,7 +275,7 @@ function AdminMainPage() {
               className={cn(
                 "py-3 text-center font-medium",
                 activeSection === "pendingVerification" &&
-                  "border-b-2 border-black"
+                "border-b-2 border-black"
               )}
               onClick={() => setActiveSection("pendingVerification")}
             >
@@ -291,7 +308,7 @@ function AdminMainPage() {
               className={cn(
                 "py-3 text-center font-medium",
                 activeSection === "completedPayments" &&
-                  "border-b-2 border-black"
+                "border-b-2 border-black"
               )}
               onClick={() => setActiveSection("completedPayments")}
             >
@@ -312,8 +329,8 @@ function AdminMainPage() {
                   activeSection === "past"
                     ? trips.past
                     : activeSection === "live"
-                    ? trips.live
-                    : trips.upcoming
+                      ? trips.live
+                      : trips.upcoming
                 }
                 activeSection={activeSection}
               />
@@ -325,8 +342,8 @@ function AdminMainPage() {
                   activeSection === "unverified"
                     ? users.unverified
                     : activeSection === "pendingVerification"
-                    ? users.pendingVerification
-                    : users.verified
+                      ? users.pendingVerification
+                      : users.verified
                 }
                 activeSection={activeSection}
               />
