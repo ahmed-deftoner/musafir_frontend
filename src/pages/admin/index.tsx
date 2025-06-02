@@ -216,47 +216,47 @@ function AdminMainPage() {
 
         {activeTab === "trips" && (
           <>
-          <div className="grid grid-cols-3 border-b">
-            <button
-              className={cn(
-                "py-3 text-center font-medium",
-                activeSection === "past" && "border-b-2 border-black"
-              )}
-              onClick={() => setActiveSection("past")}
-            >
-              Past
-            </button>
-            <button
-              className={cn(
-                "py-3 text-center font-medium",
-                activeSection === "live" && "border-b-2 border-black"
-              )}
-              onClick={() => setActiveSection("live")}
-            >
-              Live
-            </button>
-            <button
-              className={cn(
-                "py-3 text-center font-medium",
-                activeSection === "upcoming" && "border-b-2 border-black"
-              )}
-              onClick={() => setActiveSection("upcoming")}
-            >
-              Upcoming
-            </button>
-          </div>
-          <div className="flex flex-row items-center justify-center p-4">
-            <button 
-            className="bg-orange-500 text-white px-4 py-2 rounded-md w-full hover:bg-white hover:text-gray-700 hover:border-[1px] hover:border-gray-300"
-            onClick={() => {
-              setLoadingCreateFlagship(true);
-              router.push("/flagship/create");
-            }}
-            disabled={loadingCreateFlagship}
-            >
-              {loadingCreateFlagship ? "Opening Create Flagship" : "Create Flagship"}
-            </button>
-          </div>
+            <div className="grid grid-cols-3 border-b">
+              <button
+                className={cn(
+                  "py-3 text-center font-medium",
+                  activeSection === "past" && "border-b-2 border-black"
+                )}
+                onClick={() => setActiveSection("past")}
+              >
+                Past
+              </button>
+              <button
+                className={cn(
+                  "py-3 text-center font-medium",
+                  activeSection === "live" && "border-b-2 border-black"
+                )}
+                onClick={() => setActiveSection("live")}
+              >
+                Live
+              </button>
+              <button
+                className={cn(
+                  "py-3 text-center font-medium",
+                  activeSection === "upcoming" && "border-b-2 border-black"
+                )}
+                onClick={() => setActiveSection("upcoming")}
+              >
+                Upcoming
+              </button>
+            </div>
+            <div className="flex flex-row items-center justify-center p-4">
+              <button
+                className="bg-orange-500 text-white px-4 py-2 rounded-md w-full hover:bg-white hover:text-gray-700 hover:border-[1px] hover:border-gray-300"
+                onClick={() => {
+                  setLoadingCreateFlagship(true);
+                  router.push("/flagship/create");
+                }}
+                disabled={loadingCreateFlagship}
+              >
+                {loadingCreateFlagship ? "Opening Create Flagship" : "Create Flagship"}
+              </button>
+            </div>
           </>
         )}
 

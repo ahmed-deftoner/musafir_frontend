@@ -19,6 +19,6 @@ export interface IUser {
 }
 
 export interface Verification {
-  Status: string;
+  status: string;
   RequestCall: boolean;
 }

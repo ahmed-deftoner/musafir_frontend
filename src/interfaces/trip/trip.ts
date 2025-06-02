@@ -34,7 +34,7 @@ export interface IUser {
 }
 
 export interface IVerification {
-  Status: string;
+  status: string;
   RequestCall: boolean;
 }
 

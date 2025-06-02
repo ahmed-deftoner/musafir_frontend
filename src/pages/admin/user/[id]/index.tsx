@@ -118,7 +118,7 @@ export default function UserDetailsPage() {
   }
 
   const getVerificationBadge = () => {
-    switch (user.verification.Status) {
+    switch (user.verification.status) {
       case "pending":
         return (
           <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
@@ -172,7 +172,7 @@ export default function UserDetailsPage() {
       <Icon className="h-5 w-5 text-gray-500 mt-0.5" />
       <div className="flex-1">
         <p className="text-sm font-medium text-gray-500">{label}</p>
-        <p className="text-base text-gray-900">{value.toString()}</p>
+        <p className="text-base text-gray-900">{value?.toString()}</p>
       </div>
     </div>
   );
@@ -248,7 +248,7 @@ export default function UserDetailsPage() {
         </InfoCard>
 
         {/* Action Buttons */}
-        {user.verification.Status === "pending" && (
+        {user.verification.status === "pending" && (
           <Card className="w-full max-w-md mx-auto bg-white shadow-sm">
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

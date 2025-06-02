@@ -57,12 +57,12 @@ export function UsersContainer({ users, activeSection }: UsersContainerProps) {
               variant="outline"
               className={cn(
                 "capitalize",
-                user.verification.Status === "unverified" && "text-red-600",
-                user.verification.Status === "pending" && "text-yellow-600",
-                user.verification.Status === "verified" && "text-green-600"
+                user.verification.status === "unverified" && "text-red-600",
+                user.verification.status === "pending" && "text-yellow-600",
+                user.verification.status === "verified" && "text-green-600"
               )}
             >
-              {user.verification.Status}
+              {user.verification.status}
             </Badge>
           </CardFooter>
         </Card>
