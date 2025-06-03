@@ -47,7 +47,7 @@ export default function CreateAccount() {
           <Link href="/" className="p-2 hover:bg-gray-100 rounded-full">
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <h1 className="text-center flex-1 text-xl font-semibold mr-7">Onboarding</h1>
+          <h1 className="text-center flex-1 text-2xl font-semibold mr-7">Onboarding</h1>
         </header>
 
         {/* Main Content */}

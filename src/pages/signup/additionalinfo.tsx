@@ -63,12 +63,8 @@ export default function AdditionalInfo() {
       <div className="bg-white min-h-screen w-full max-w-md mx-auto rounded-lg shadow-sm p-3">
         {/* Header */}
         <div className="p-4 border-b">
-          <div className="flex items-center justify-between mb-6">
-            <button className="p-2 hover:bg-gray-100 rounded-full">
-              <X className="h-5 w-5" />
-            </button>
-            <h1 className="text-xl font-semibold">Onboarding</h1>
-            <div className='w-12 h-4'></div>
+          <div className="flex items-center justify-center mb-6">
+            <h1 className="text-2xl font-semibold">Onboarding</h1>
           </div>
 
           {/* Progress Steps */}

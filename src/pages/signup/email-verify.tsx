@@ -53,11 +53,8 @@ export default function EmailVerification() {
       <div className="min-h-screen bg-white w-full max-w-md mx-auto rounded-lg shadow-sm p-6">
 
         {/* header */}
-        <div className="flex items-center justify-between mb-8 mt-3">
+        <div className="flex items-center justify-center mb-8 mt-3">
           <h1 className="text-2xl font-semibold text-center flex-1">Onboarding</h1>
-          <button className="p-2 hover:bg-gray-100 rounded-full">
-            <X className="h-5 w-5" />
-          </button>
         </div>
 
         <div className="p-1">

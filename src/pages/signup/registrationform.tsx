@@ -38,13 +38,8 @@ export default function RegistrationForm() {
       <div className="bg-white w-full max-w-md mx-auto shadow-sm p-3">
         {/* Header */}
         <div className="p-4 border-b">
-          <div className="flex items-center mb-6">
-            <button className="p-2 hover:bg-gray-100 rounded-full mr-auto">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-            <h1 className="text-xl font-semibold text-center flex-grow">Onboarding</h1>
+          <div className="flex items-center justify-center mb-6">
+            <h1 className="text-2xl font-semibold text-center flex-grow">Onboarding</h1>
           </div>
 
           {/* Progress Steps */}

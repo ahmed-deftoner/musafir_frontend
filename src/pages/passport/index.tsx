@@ -39,8 +39,8 @@ function Passport() {
     <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
       <div className='bg-white w-full max-w-md mx-auto rounded-lg h-screen'>
         {/* Header */}
-        <header className="p-4 flex justify-center">
-          <h1 className="text-2xl font-bold">Passport</h1>
+        <header className="flex items-center justify-center p-4">
+          <h1 className="text-2xl font-semibold">Passport</h1>
         </header>
 
         {/* Tabs */}

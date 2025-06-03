@@ -3,13 +3,18 @@ import { useState, useEffect } from 'react';
 import Navigation from '../navigation';
 import withAuth from '@/hoc/withAuth';
 import useUserHandler from '@/hooks/useUserHandler';
-
+import { LogOut } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 
 function UserSettings() {
   const [userData, setUserData] = useState<any>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const userHandler = useUserHandler();
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/login' });
+  };
 
   const fetchUserData = async () => {
     try {
@@ -116,6 +121,15 @@ function UserSettings() {
                 />
               </div>
             </form>
+            <div className='flex justify-end px-6 mt-4'>
+              <button
+                onClick={handleLogout}
+                className='flex items-center gap-2 px-5 py-3 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-orange-500 hover:text-white rounded-md transition-colors'
+              >
+                <LogOut className='w-5 h-5' />
+                Logout
+              </button>
+            </div>
           </main>
         </div>
       </div>
