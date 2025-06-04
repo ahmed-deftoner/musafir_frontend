@@ -2,20 +2,29 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { 
-  signIn, 
-  // useSession 
+import {
+  signIn,
 } from "next-auth/react";
+import useSignUpHook from '@/hooks/useSignUp';
+import { showAlert } from '@/pages/alert';
 
 
 export default function CreateAccount() {
-  // const { data: session } = useSession();
   const router = useRouter();
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState<string>('')
+  const useSignUp = useSignUpHook();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmit = (e: any) => {
+  const checkEmailAvailability = async () => {
+    return await useSignUp.checkEmailAvailability(email);
+  }
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    if (!await checkEmailAvailability()) {
+      showAlert('Email already exists, Please enter another email', 'error');
+      return;
+    }
+    
     const savedData = JSON.parse(localStorage.getItem('formData') || '{}');
 
     const formData = {
@@ -26,10 +35,9 @@ export default function CreateAccount() {
   };
 
   const handleGoogleSignIn = async () => {
-    // Initiate Google sign-in with a redirect state
     const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     await signIn("google", {
-      callbackUrl: "/login", // Redirect after login
+      callbackUrl: "/login",
       cnic: savedData?.cnic || '',
       fullName: savedData?.fullName || '',
       gender: savedData?.gender || '',
@@ -73,7 +81,7 @@ export default function CreateAccount() {
               />
             </div>
 
-            <button 
+            <button
               type="submit"
               className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-md text-sm font-medium transition-colors"
             >
@@ -89,23 +97,14 @@ export default function CreateAccount() {
               </div>
             </div>
 
-            <button 
+            <button
               onClick={handleGoogleSignIn}
               type="button"
               className="w-full border border-gray-300 hover:bg-gray-50 py-4 rounded-md text-sm font-medium transition-colors"
             >
               Sign Up with Google
             </button>
-            <div>
-            {/* {session ? (
-              <>
-                <p>Welcome, {session.user?.name}!</p>
-                <button onClick={() => signOut()}>Sign Out</button>
-              </>
-            ) : (
-              <button onClick={() => signIn("google")}>Sign in with Google</button>
-            )} */}
-          </div>
+
           </form>
         </main>
       </div>

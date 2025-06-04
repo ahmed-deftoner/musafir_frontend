@@ -4,6 +4,7 @@ const endpoints = {
   SIGNUP: "/user/register",
   CREATE_GOOGLE: "/user/create",
   VERIFY_EMAIL: "/user/verify-email",
+  CHECK_EMAIL_AVAILABILITY: "/user/check-email-availability",
   REQUEST_VERIFICATION: "/user/request-verification",
   FLAGSHIP: {
     FILTER: "/flagship",

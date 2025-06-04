@@ -7,7 +7,7 @@ import { SignupUser } from '@/interfaces/signup';
 
 const useSignUpHook = () => {
   // const [user, setUser] = useRecoilState(currentUser);
-  const { SIGNUP, LOGOUT, VERIFY_EMAIL } = apiEndpoints;
+  const { SIGNUP, LOGOUT, VERIFY_EMAIL, CHECK_EMAIL_AVAILABILITY } = apiEndpoints;
   const router = useRouter();
 
   const register = async (user: BaseUser): Promise<unknown> => {
@@ -21,10 +21,10 @@ const useSignUpHook = () => {
   };
 
   const verifyEmail = async (password: string, verificationId: string): Promise<any> => {
-    const data = await api.post(`${VERIFY_EMAIL}`, {password, verificationId});
-    if(data){
+    const data = await api.post(`${VERIFY_EMAIL}`, { password, verificationId });
+    if (data) {
       return data;
-    } else{
+    } else {
       console.log("error verifying the email")
     }
   }
@@ -44,8 +44,15 @@ const useSignUpHook = () => {
     router.replace('/');
   };
 
+  const checkEmailAvailability = async (email: string) => {
+    const encodedEmail = encodeURIComponent(email);
+    const data = await api.get(`${CHECK_EMAIL_AVAILABILITY}?email=${encodedEmail}`);
+    return data;
+  };
+
   return {
     // user,
+    checkEmailAvailability,
     logout,
     register,
     verifyEmail,
