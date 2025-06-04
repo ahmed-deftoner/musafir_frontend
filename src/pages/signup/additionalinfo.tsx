@@ -70,7 +70,7 @@ export default function AdditionalInfo() {
           {/* Progress Steps */}
           <div className="flex items-center justify-between mb-3 relative">
             {/* Step 1 */}
-            <div className="flex flex-col items-center z-10">
+            <div className="flex flex-col items-center z-10" onClick={() => router.push('/signup/registrationform')}>
               <div className="w-10 h-10 rounded-full bg-[#F3F3F3] text-[#A6A6A6] flex items-center justify-center text-sm">
                 1
               </div>
@@ -85,7 +85,7 @@ export default function AdditionalInfo() {
             {/* Step 2 (conditionally rendered) */}
             {flagshipId && (
               <>
-                <div className="flex flex-col items-center z-10">
+                <div className="flex flex-col items-center z-10" onClick={() => router.push('/flagship/flagship-requirement')}>
                   <div className="w-10 h-10 rounded-full bg-[#F3F3F3] text-[#A6A6A6] flex items-center justify-center text-sm">
                     2
                   </div>

@@ -31,22 +31,39 @@ function FlagshipRequirements() {
 
   const getFlagship = async (flagshipId: any) => {
     const response = await action.getFlagship(flagshipId);
-    setPrice(Number(response.basePrice));
+    if (Number(response.basePrice) > price) {
+      setPrice(Number(response.basePrice));
+    }
     setFlagship(response);
   };
 
   useEffect(() => {
-    const flagshipId = searchParams.get("id");
-    const fromDetailsPage = searchParams.get("fromDetailsPage") === "true";
-    setFromDetailsPage(fromDetailsPage);
+    const fetchData = async () => {
+      const flagshipId = searchParams.get("id");
+      const fromDetailsPage = searchParams.get("fromDetailsPage") === "true";
+      setFromDetailsPage(fromDetailsPage);
 
-    if (flagshipId) {
-      getFlagship(flagshipId);
-      localStorage.setItem("flagshipId", JSON.stringify(flagshipId));
-    } else {
-      const flagshipId = JSON.parse(localStorage.getItem("flagshipId") || "{}");
-      getFlagship(flagshipId);
-    }
+      if (flagshipId) {
+        await getFlagship(flagshipId);
+        localStorage.setItem("flagshipId", JSON.stringify(flagshipId));
+      } else {
+        const flagshipId = JSON.parse(localStorage.getItem("flagshipId") || "{}");
+        await getFlagship(flagshipId);
+      }
+      const registration = JSON.parse(localStorage.getItem("registration") || "{}");
+      if (registration) {
+        setCity(registration.joiningFromCity);
+        setTiers(registration.tier);
+        setSleepPreference(registration.bedPreference);
+        setRoomSharing(registration.roomSharing);
+        setTripType(registration.tripType);
+        setGroupMembers(registration.groupMembers);
+        setExpectations(registration.expectations);
+        setPrice(Number(registration.price));
+      }
+    };
+
+    fetchData();
   }, [searchParams]);
 
   const handleExpectationsChange = (
@@ -74,11 +91,11 @@ function FlagshipRequirements() {
         price,
       };
 
-      if(fromDetailsPage){
+      if (fromDetailsPage) {
         const { registrationId, message } = await registrationAction.create(registration) as { registrationId: string, message: string };
         localStorage.setItem("registrationId", JSON.stringify(registrationId));
         router.push(`/flagship/seats`);
-      } else{
+      } else {
         localStorage.setItem("registration", JSON.stringify(registration));
         router.push("/signup/additionalinfo");
       }
@@ -119,7 +136,7 @@ function FlagshipRequirements() {
             {/* Progress Steps */}
             <div className="flex items-center justify-between mb-3 relative">
               {/* Step 1 */}
-              <div className="flex flex-col items-center z-10">
+              <div className="flex flex-col items-center z-10" onClick={() => router.push('/signup/registrationform')}>
                 <div className="w-10 h-10 rounded-full bg-[#F3F3F3] text-[#A6A6A6] flex items-center justify-center text-sm">
                   1
                 </div>
@@ -142,7 +159,7 @@ function FlagshipRequirements() {
               </>
 
               {/* Step 3 */}
-              <div className="flex flex-col items-center z-10">
+              <div className="flex flex-col items-center z-10" onClick={() => router.push('/signup/additionalinfo')}>
                 <div className="w-10 h-10 rounded-full bg-[#F3F3F3] text-[#A6A6A6] flex items-center justify-center text-sm">
                   3
                 </div>
