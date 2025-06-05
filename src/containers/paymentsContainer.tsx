@@ -40,7 +40,7 @@ export function PaymentsContainer({
 
   return (
     <div className="space-y-6">
-      {payments.map((item) => (
+      {payments?.length > 0 ? payments.map((item) => (
         <Card
           key={item._id}
           className="overflow-hidden transition-all duration-200 hover:shadow-lg"
@@ -180,7 +180,11 @@ export function PaymentsContainer({
             )}
           </CardFooter>
         </Card>
-      ))}
+      )) : (
+        <div className="text-center text-gray-500 py-8">
+          <p className="text-xl font-medium mb-2">No Payments Available Yet</p>
+        </div>
+      )}
     </div>
   );
 }

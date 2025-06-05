@@ -24,7 +24,7 @@ export function UsersContainer({ users, activeSection }: UsersContainerProps) {
 
   return (
     <div className="space-y-6">
-      {users.map((user) => (
+      {users?.length > 0 ? users.map((user) => (
         <Card
           key={user._id}
           className="overflow-hidden transition-all duration-200 hover:shadow-lg"
@@ -66,7 +66,11 @@ export function UsersContainer({ users, activeSection }: UsersContainerProps) {
             </Badge>
           </CardFooter>
         </Card>
-      ))}
+      )) : (
+        <div className="text-center text-gray-500 py-8">
+          <p className="text-xl font-medium mb-2">No Users Available Yet</p>
+        </div>
+      )}
     </div>
   );
 }

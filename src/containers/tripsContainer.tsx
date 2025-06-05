@@ -32,7 +32,7 @@ export function TripsContainer({ trips, activeSection }: TripsContainerProps) {
 
   return (
     <div className="space-y-6">
-      {trips.map((trip) => (
+      {trips?.length > 0 ? trips.map((trip) => (
         <Card
           key={trip._id}
           className="overflow-hidden transition-all duration-200 hover:shadow-lg"
@@ -67,7 +67,12 @@ export function TripsContainer({ trips, activeSection }: TripsContainerProps) {
             </Button>
           </CardFooter>
         </Card>
-      ))}
+      )) : (
+        <div className="text-center text-gray-500 py-8">
+          <p className="text-xl font-medium mb-2">No Trips Available Yet</p>
+          <p className="text-lg ">Stay tuned! We're working on bringing exciting new trips your way.</p>
+        </div>
+      )}
     </div>
   );
 }
