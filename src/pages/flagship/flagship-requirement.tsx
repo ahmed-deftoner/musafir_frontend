@@ -70,7 +70,7 @@ function FlagshipRequirements() {
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const text = e.target.value;
-    if (text.length <= 100) {
+    if (text?.length <= 100) {
       setExpectations(text);
     }
   };
@@ -104,16 +104,16 @@ function FlagshipRequirements() {
     }
   };
 
-  const imageUrls = flagship?.images && flagship?.images.length > 0 ? flagship?.images : [];
+  const imageUrls = flagship?.images && flagship?.images?.length > 0 ? flagship?.images : [];
 
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev + 1) % imageUrls.length);
+    setCurrentImageIndex((prev) => (prev + 1) % imageUrls?.length);
   };
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === 0 ? imageUrls.length - 1 : prev - 1));
+    setCurrentImageIndex((prev) => (prev === 0 ? imageUrls?.length - 1 : prev - 1));
   };
 
   return (
@@ -177,7 +177,7 @@ function FlagshipRequirements() {
             className="object-cover"
           />
 
-          {imageUrls.length > 1 && (
+          {imageUrls?.length > 1 && (
             <>
               <button
                 onClick={prevImage}
@@ -497,7 +497,7 @@ function FlagshipRequirements() {
                   Expectations of the trip (optional)
                 </label>
                 <span className="text-sm text-gray-500">
-                  {expectations.length}/100
+                  {expectations?.length}/100
                 </span>
               </div>
               <textarea
