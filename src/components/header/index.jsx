@@ -53,7 +53,7 @@ export default function Header({ notificationCount, setSidebarOpen }) {
               className='absolute right-0 mt-16 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10'
             >
               <button
-                onClick={() => signOut({ callbackUrl: '/login' })}
+                onClick={() => signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/login` || '/login' })}
                 className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
               >
                 Sign out

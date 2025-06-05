@@ -7,7 +7,7 @@ export default function Unauthorized() {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/login' });
+    await signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/login` || '/login' });
   };
 
   const handleGoBack = () => {

@@ -13,7 +13,7 @@ function UserSettings() {
   const userHandler = useUserHandler();
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: '/login' });
+    await signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/login` || '/login' });
   };
 
   const fetchUserData = async () => {

@@ -64,7 +64,7 @@ export default function Login() {
   const handleGoogleSignIn = async () => {
     // Initiate Google sign-in with a redirect state
     await signIn('google', {
-      callbackUrl: '/home', // Redirect after login
+      callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/home` || '/home', // Redirect after login
     });
   };
 
