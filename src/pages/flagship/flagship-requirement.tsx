@@ -382,7 +382,7 @@ function FlagshipRequirements() {
                   value="mattress"
                   checked={sleepPreference === "mattress"}
                   onChange={() => {
-                    if (sleepPreference == "bed") {
+                    if (sleepPreference == "bed" && flagship?.mattressTiers?.[0]?.price) {
                       setPrice(
                         price - Number(flagship?.mattressTiers[0].price)
                       );
