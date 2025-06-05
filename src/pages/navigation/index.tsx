@@ -10,7 +10,7 @@ export function Navigation() {
     { href: "/home", label: "Home", icon: Home },
     { href: "/passport", label: "Passport", icon: Flag },
     { href: "/wallet", label: "Wallet", icon: Wallet },
-    { href: "", label: "Referral", icon: Users },
+    { href: "/referrals", label: "Referral", icon: Users },
     { href: "/userSettings", label: "Settings", icon: Settings },
   ]
 
