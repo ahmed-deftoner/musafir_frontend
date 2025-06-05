@@ -7,13 +7,16 @@ import useFlagshipHook from '../../hooks/useFlagshipHandler';
 function Home() {
   const actionFlagship = useFlagshipHook();
   const [flagships, setFlagships] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchFlagships = async () => {
     try {
+      setIsLoading(true);
       const data = await actionFlagship.getAllFlagships();
       if (data) {
         setFlagships(data);
       }
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching flagships:', error);
     }
@@ -45,6 +48,10 @@ function Home() {
                   />
                 );
               })
+            ) : isLoading ? (
+              <div className="text-center text-gray-500 py-8">
+                <p className="text-xl font-medium mb-2">Loading Flagships For You</p>
+              </div>
             ) : (
               <div className="text-center text-gray-500 py-8">
                 <p className="text-xl font-medium mb-2">No Flagships Available Yet</p>

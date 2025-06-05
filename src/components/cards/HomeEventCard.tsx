@@ -85,9 +85,6 @@ export default function HomeEventCard({
         <p className="text-sm text-gray-600">
           {new Date(startDate).getDate()} - {new Date(endDate).getDate()}th {new Date(endDate).toLocaleString('default', { month: 'short' })} @ {destination}
         </p>
-        <button onClick={handleClick} className="rounded-full bg-gray-200 px-4 py-1.5 text-sm font-medium text-[#2B2D42] hover:bg-[#FF9000] transition-colors">
-          Book Now
-        </button>
       </div>
     </div>
   );

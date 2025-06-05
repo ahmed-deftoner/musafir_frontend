@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import imag from './../../assets/launchscreen.jpeg'
 import { useEffect } from 'react';
+import MusafirLogo from './../../assets/musafir-logo.svg';
 
 export default function LaunchScreen() {
   const router = useRouter()
@@ -23,22 +24,7 @@ export default function LaunchScreen() {
         <div className="relative flex min-h-screen flex-col items-center justify-center px-4 text-[#2B2D42]">
           {/* Logo */}
           <div className="mb-8">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              className="h-16 w-16"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                d="M2 9L12 3L22 9L12 15L2 9Z"
-                className="fill-orange-500 stroke-orange-500"
-              />
-              <path
-                d="M22 15L12 21L2 15"
-                className="fill-none stroke-orange-500"
-              />
-            </svg>
+            <Image src={MusafirLogo} alt="Musafir Logo" className="h-16 w-16" />
           </div>
 
           {/* Question Text */}
