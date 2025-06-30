@@ -27,7 +27,9 @@ const withAuth = <P extends object>(
         : true; // If no allowedRoles provided, or if roles aren't loaded yet, default to true. If we want to treat an empty roles array as unauthorized we can adjust it heres
 
     const handleSignOut = async () => {
-      await signOut({ callbackUrl: "/login" });
+      await signOut({
+        callbackUrl: `https://main.d1gcdykopg01ak.amplifyapp.com//login`,
+      });
     };
 
     useEffect(() => {
