@@ -35,7 +35,7 @@ export default NextAuth({
       async authorize(credentials) {
         try {
           const res = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/user/login`,
+            `https://main.d1gcdykopg01ak.amplifyapp.com//user/login`,
             {
               email: credentials?.email,
               password: credentials?.password,
@@ -62,7 +62,7 @@ export default NextAuth({
         try {
           // Send Google user details to NestJS API to create/get a user and receive JWT
           const res = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/user/google`,
+            `https://main.d1gcdykopg01ak.amplifyapp.com//user/google`,
             {
               email: user.email,
               googleId: user.id,
