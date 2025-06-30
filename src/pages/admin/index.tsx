@@ -254,7 +254,9 @@ function AdminMainPage() {
                 }}
                 disabled={loadingCreateFlagship}
               >
-                {loadingCreateFlagship ? "Opening Create Flagship" : "Create Flagship"}
+                {loadingCreateFlagship
+                  ? "Opening Create Flagship"
+                  : "Create Flagship"}
               </button>
             </div>
           </>
@@ -275,7 +277,7 @@ function AdminMainPage() {
               className={cn(
                 "py-3 text-center font-medium",
                 activeSection === "pendingVerification" &&
-                "border-b-2 border-black"
+                  "border-b-2 border-black"
               )}
               onClick={() => setActiveSection("pendingVerification")}
             >
@@ -308,7 +310,7 @@ function AdminMainPage() {
               className={cn(
                 "py-3 text-center font-medium",
                 activeSection === "completedPayments" &&
-                "border-b-2 border-black"
+                  "border-b-2 border-black"
               )}
               onClick={() => setActiveSection("completedPayments")}
             >
@@ -329,8 +331,8 @@ function AdminMainPage() {
                   activeSection === "past"
                     ? trips.past
                     : activeSection === "live"
-                      ? trips.live
-                      : trips.upcoming
+                    ? trips.live
+                    : trips.upcoming
                 }
                 activeSection={activeSection}
               />
@@ -342,8 +344,8 @@ function AdminMainPage() {
                   activeSection === "unverified"
                     ? users.unverified
                     : activeSection === "pendingVerification"
-                      ? users.pendingVerification
-                      : users.verified
+                    ? users.pendingVerification
+                    : users.verified
                 }
                 activeSection={activeSection}
               />
@@ -373,4 +375,4 @@ function AdminMainPage() {
   );
 }
 
-export default withAuth(AdminMainPage, { allowedRoles: [ROLES.ADMIN] });
+export default AdminMainPage;
