@@ -375,4 +375,4 @@ function AdminMainPage() {
   );
 }
 
-export default AdminMainPage;
+export default withAuth(AdminMainPage, { allowedRoles: [ROLES.ADMIN] });
