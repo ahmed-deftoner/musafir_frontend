@@ -63,8 +63,12 @@ export const RegistrationsList = () => {
             <div className="border rounded-lg p-4 flex items-center relative">
               <div className="h-12 w-12 mr-4 overflow-hidden rounded-full">
                 <img
-                  src={(r.user as IUser).profileImg || "/placeholder.svg"}
-                  alt={(r.user as IUser).fullName}
+                  src={(r.user as IUser).profileImg || "/anonymous-user.png"}
+                  alt={
+                    (r.user as IUser).profileImg
+                      ? (r.user as IUser).fullName
+                      : "Anonymous User"
+                  }
                   className="h-full w-full object-cover"
                 />
               </div>

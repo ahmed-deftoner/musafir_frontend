@@ -164,8 +164,15 @@ export default function UserDetails() {
       <div className="p-4 flex items-center">
         <div className="h-16 w-16 mr-4 overflow-hidden rounded-full bg-gray-200">
           <img
-            src={(registeredUser?.user as IUser).profileImg}
-            alt="Ali Rehan"
+            src={
+              (registeredUser?.user as IUser).profileImg ||
+              "/anonymous-user.png"
+            }
+            alt={
+              (registeredUser?.user as IUser).profileImg
+                ? (registeredUser?.user as IUser).fullName
+                : "Anonymous User"
+            }
             className="h-full w-full object-cover"
           />
         </div>
