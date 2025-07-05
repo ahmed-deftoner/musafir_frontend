@@ -48,9 +48,15 @@ export const VerificationList = () => {
             <Avatar className="h-12 w-12 mr-4">
               <img
                 src={
-                  (registration.user as IUser).profileImg || "/placeholder.svg"
+                  (registration.user as IUser).profileImg ||
+                  "/anonymous-user.png"
                 }
-                alt={(registration.user as IUser).fullName}
+                alt={
+                  (registration.user as IUser).profileImg
+                    ? (registration.user as IUser).fullName
+                    : "Anonymous User"
+                }
+                className="h-full w-full object-cover"
               />
             </Avatar>
             <div className="flex-1">
