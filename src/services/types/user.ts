@@ -21,4 +21,5 @@ export interface IUser {
 export interface Verification {
   status: string;
   RequestCall: boolean;
+  videoLink?: string;
 }

@@ -244,6 +244,24 @@ export default function UserDetailsPage() {
               label="Request Call"
               value={user.verification.RequestCall ? "Yes" : "No"}
             />
+            {user.verification.videoLink && (
+              <div className="flex items-start space-x-3 py-2">
+                <Link className="h-5 w-5 text-gray-500 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-500">
+                    Video Link
+                  </p>
+                  <a
+                    href={user.verification.videoLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 underline break-all"
+                  >
+                    {user.verification.videoLink}
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </InfoCard>
 
