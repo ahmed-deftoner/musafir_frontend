@@ -275,7 +275,7 @@ export default function PaymentDetailsPage() {
         <CardContent>
           <div className="relative aspect-video w-full">
             <Image
-              src="/murree.webp"
+              src={payment.screenshot}
               alt="Payment Screenshot"
               fill
               className="object-contain"
