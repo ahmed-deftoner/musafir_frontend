@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { PaymentService } from "@/services/paymentService";
 import { useRouter } from "next/router";
 
-const success = () => {
+const SuccessComponent = () => {
+  const router = useRouter();
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen flex flex-col">
       <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
@@ -31,7 +32,10 @@ const success = () => {
       </div>
 
       <div className="p-4">
-        <Button className="w-full bg-orange-500 hover:bg-orange-600 h-12 text-base">
+        <Button
+          onClick={() => router.push("/passport")}
+          className="w-full bg-orange-500 hover:bg-orange-600 h-12 text-base"
+        >
           Okay, Great
         </Button>
       </div>
@@ -80,7 +84,7 @@ export default function RefundForm() {
   };
 
   if (isSubmitted) {
-    return success();
+    return <SuccessComponent />;
   }
 
   return (
@@ -100,8 +104,8 @@ export default function RefundForm() {
             Are you sure you want to let go off
           </h2>
           <p className="text-gray-500">
-            Unforeseen circumstances can arise and plans may change, hence we've
-            created this refund form.
+            Unforeseen circumstances can arise and plans may change, hence
+            we&apos;ve created this refund form.
           </p>
         </div>
 
@@ -212,7 +216,7 @@ export default function RefundForm() {
         <div className="space-y-2">
           <div className="flex justify-between">
             <Label htmlFor="feedback" className="text-base font-medium">
-              Anything else you'd like to share with us?
+              Anything else you&apos;d like to share with us?
             </Label>
             <span className="text-sm text-gray-500">{feedback.length}/100</span>
           </div>
