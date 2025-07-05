@@ -329,39 +329,89 @@ export default function UserDetails() {
             <div className="mt-4 space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-500">Verification Choice</span>
-                <span className="font-medium">2 Referral</span>
+                <span className="font-medium">
+                  {(() => {
+                    const user = registeredUser?.user as IUser;
+                    if (!user || !user.verification) return "Not specified";
+
+                    const verification = user.verification;
+                    if (verification.videoLink) return "Video";
+                    if (
+                      verification.referralIDs &&
+                      verification.referralIDs.length > 0
+                    ) {
+                      return `${verification.referralIDs.length} Referral${
+                        verification.referralIDs.length > 1 ? "s" : ""
+                      }`;
+                    }
+                    if (verification.RequestCall) return "Request Call";
+                    return "Not specified";
+                  })()}
+                </span>
               </div>
+
+              {(registeredUser?.user as IUser)?.verification?.videoLink && (
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Video Link</span>
+                  <a
+                    href={
+                      (registeredUser?.user as IUser).verification.videoLink
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 underline text-sm"
+                  >
+                    View Video
+                  </a>
+                </div>
+              )}
 
               <div className="flex justify-between">
                 <span className="text-gray-500">Verification Date</span>
                 <span className="font-medium">Dec 10, 2024</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mt-4">
-                <button className="border border-gray-300 rounded-lg py-3 px-4 font-medium">
-                  Didn't Pick
-                </button>
+              {registeredUser?.status === "pending" && (
+                <>
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    <button className="border border-gray-300 rounded-lg py-3 px-4 font-medium">
+                      Didn&apos;t Pick
+                    </button>
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openModal("reject");
-                  }}
-                  className="bg-red-800 text-white rounded-lg py-3 px-4 font-medium"
-                >
-                  Reject
-                </button>
-              </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openModal("reject");
+                      }}
+                      className="bg-red-800 text-white rounded-lg py-3 px-4 font-medium"
+                    >
+                      Reject
+                    </button>
+                  </div>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openModal("approve");
-                }}
-                className="w-full bg-orange-500 text-white rounded-lg py-3 px-4 font-medium"
-              >
-                Approve
-              </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openModal("approve");
+                    }}
+                    className="w-full bg-orange-500 text-white rounded-lg py-3 px-4 font-medium"
+                  >
+                    Approve
+                  </button>
+                </>
+              )}
+
+              {registeredUser?.status === "accepted" && (
+                <div className="mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-center font-medium">
+                  Registration Accepted
+                </div>
+              )}
+
+              {registeredUser?.status === "rejected" && (
+                <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-lg text-center font-medium">
+                  Registration Rejected
+                </div>
+              )}
             </div>
           )}
         </div>

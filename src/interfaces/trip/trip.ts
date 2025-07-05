@@ -36,6 +36,8 @@ export interface IUser {
 export interface IVerification {
   status: string;
   RequestCall: boolean;
+  videoLink?: string;
+  referralIDs?: string[];
 }
 
 export interface IPayment {
