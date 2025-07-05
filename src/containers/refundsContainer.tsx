@@ -106,7 +106,7 @@ export const RefundsContainer = ({
                         Rs.{" "}
                         {(
                           (refund?.registration as IRegistration)
-                            ?.payment as unknown as IPayment
+                            ?.paymentId as unknown as IPayment
                         ).amount.toLocaleString()}
                       </span>
                     </div>
@@ -116,7 +116,7 @@ export const RefundsContainer = ({
                         {new Date(
                           (
                             (refund?.registration as IRegistration)
-                              ?.payment as unknown as IPayment
+                              ?.paymentId as unknown as IPayment
                           ).createdAt
                         ).toLocaleDateString()}
                       </span>
@@ -182,7 +182,7 @@ export const RefundsContainer = ({
                       handleViewDetails(
                         (
                           (refund.registration as IRegistration)
-                            .payment as unknown as IPayment
+                            .paymentId as unknown as IPayment
                         )._id
                       )
                     }
@@ -225,7 +225,7 @@ export const RefundsContainer = ({
                         Rs.{" "}
                         {(
                           (refund.registration as IRegistration)
-                            .payment as unknown as IPayment
+                            .paymentId as unknown as IPayment
                         ).amount.toLocaleString()}
                       </span>
                     </div>
@@ -235,7 +235,7 @@ export const RefundsContainer = ({
                         {new Date(
                           (
                             (refund.registration as IRegistration)
-                              .payment as unknown as IPayment
+                              .paymentId as unknown as IPayment
                           ).createdAt
                         ).toLocaleDateString()}
                       </span>
@@ -293,7 +293,7 @@ export const RefundsContainer = ({
                       handleViewDetails(
                         (
                           (refund.registration as IRegistration)
-                            .payment as unknown as IPayment
+                            .paymentId as unknown as IPayment
                         )._id
                       )
                     }

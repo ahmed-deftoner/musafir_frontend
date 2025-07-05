@@ -5,6 +5,7 @@ export interface IRegistration {
   flagship: IFlagship | string;
   user: IUser | string;
   payment?: IPayment | string;
+  paymentId?: IPayment | string;
   status: string;
   comment: string;
   createdAt: string;
