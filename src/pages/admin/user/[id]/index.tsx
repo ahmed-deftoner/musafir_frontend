@@ -125,10 +125,10 @@ export default function UserDetailsPage() {
             Pending
           </Badge>
         );
-      case "approved":
+      case "verified":
         return (
           <Badge variant="default" className="bg-green-100 text-green-800">
-            Approved
+            Verified
           </Badge>
         );
       case "rejected":
