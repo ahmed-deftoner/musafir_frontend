@@ -60,9 +60,10 @@ export default NextAuth({
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         try {
+          console.log(`${process.env.NEXT_PUBLIC_API_URL}/user/google`);
           // Send Google user details to NestJS API to create/get a user and receive JWT
           const res = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/user/google`,
+            `/user/google`,
             {
               email: user.email,
               googleId: user.id,
@@ -102,7 +103,7 @@ export default NextAuth({
     signOut: "/login",
   },
 
-  secret: "VPrHBczgEZdJQxzleeOkorzpMeiBftjkwwfDRDorfDg=",
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },

@@ -61,7 +61,7 @@ export default function Dashboard() {
           </TabsList>
         </Tabs>
 
-        {activeTab === "stats" && (
+        {/* {activeTab === "stats" && (
           <div className="grid grid-cols-2 border-b">
             <button
               className={cn(
@@ -82,7 +82,7 @@ export default function Dashboard() {
               Payments
             </button>
           </div>
-        )}
+        )} */}
       </header>
       {activeTab === "stats" && activeSection === "registrations" && (
         <RegistrationStatsContainer />
