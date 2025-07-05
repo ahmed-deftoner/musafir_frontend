@@ -31,9 +31,8 @@ function FlagshipRequirements() {
 
   const getFlagship = async (flagshipId: any) => {
     const response = await action.getFlagship(flagshipId);
-    if (Number(response.basePrice) > price) {
-      setPrice(Number(response.basePrice));
-    }
+    const basePrice = Number(response.basePrice) || 0;
+    setPrice(basePrice);
     setFlagship(response);
   };
 
@@ -51,7 +50,7 @@ function FlagshipRequirements() {
         await getFlagship(flagshipId);
       }
       const registration = JSON.parse(localStorage.getItem("registration") || "{}");
-      if (registration) {
+      if (registration && Object.keys(registration).length > 0) {
         setCity(registration.joiningFromCity);
         setTiers(registration.tier);
         setSleepPreference(registration.bedPreference);
@@ -59,7 +58,7 @@ function FlagshipRequirements() {
         setTripType(registration.tripType);
         setGroupMembers(registration.groupMembers);
         setExpectations(registration.expectations);
-        setPrice(Number(registration.price));
+        setPrice(Number(registration.price) || 0);
       }
     };
 
