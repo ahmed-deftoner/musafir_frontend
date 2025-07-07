@@ -1,49 +1,47 @@
-import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import {
-  signIn,
-} from "next-auth/react";
-import useSignUpHook from '@/hooks/useSignUp';
-import { showAlert } from '@/pages/alert';
-
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import useSignUpHook from "@/hooks/useSignUp";
+import { showAlert } from "@/pages/alert";
 
 export default function CreateAccount() {
   const router = useRouter();
-  const [email, setEmail] = useState<string>('')
+  const [email, setEmail] = useState<string>("");
   const useSignUp = useSignUpHook();
 
   const checkEmailAvailability = async () => {
     return await useSignUp.checkEmailAvailability(email);
-  }
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (!await checkEmailAvailability()) {
-      showAlert('Email already exists, Please enter another email', 'error');
+    if (!(await checkEmailAvailability())) {
+      showAlert("Email already exists, Please enter another email", "error");
       return;
     }
-    
-    const savedData = JSON.parse(localStorage.getItem('formData') || '{}');
+
+    const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
 
     const formData = {
-      ...savedData, email
-    }
-    localStorage.setItem('formData', JSON.stringify(formData));
-    router.push('/signup/registrationform');
+      ...savedData,
+      email,
+    };
+    localStorage.setItem("formData", JSON.stringify(formData));
+    router.push("/signup/registrationform");
   };
 
   const handleGoogleSignIn = async () => {
     const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     await signIn("google", {
       callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/login` || "/login",
-      cnic: savedData?.cnic || '',
-      fullName: savedData?.fullName || '',
-      gender: savedData?.gender || '',
-      phone: savedData?.phone || '',
-      socialLink: savedData?.socialLink || '',
-      university: savedData?.university || ''
+      cnic: savedData?.cnic || "",
+      fullName: savedData?.fullName || "",
+      gender: savedData?.gender || "",
+      phone: savedData?.phone || "",
+      socialLink: savedData?.socialLink || "",
+      university: savedData?.university || "",
     });
   };
 
@@ -55,14 +53,20 @@ export default function CreateAccount() {
           <Link href="/" className="p-2 hover:bg-gray-100 rounded-full">
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <h1 className="text-center flex-1 text-2xl font-semibold mr-7">Onboarding</h1>
+          <h1 className="text-center flex-1 text-2xl font-semibold mr-7">
+            Onboarding
+          </h1>
         </header>
 
         {/* Main Content */}
         <main className="p-4 max-w-md mx-auto">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-2">Let's create your account</h2>
-            <p className="text-gray-600">Never fill long forms again + get discounts on future flagships</p>
+            <h2 className="text-2xl font-bold mb-2">
+              Let's create your account
+            </h2>
+            <p className="text-gray-600">
+              Never fill long forms again + get discounts on future flagships
+            </p>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -76,7 +80,7 @@ export default function CreateAccount() {
                 value={email}
                 required={true}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder='Enter Email'
+                placeholder="Enter Email"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
             </div>
@@ -104,11 +108,9 @@ export default function CreateAccount() {
             >
               Sign Up with Google
             </button>
-
           </form>
         </main>
       </div>
     </div>
-  )
+  );
 }
-
