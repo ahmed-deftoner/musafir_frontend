@@ -9,27 +9,36 @@ import { showAlert } from "@/pages/alert";
 export default function CreateAccount() {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const useSignUp = useSignUpHook();
 
   const checkEmailAvailability = async () => {
     return await useSignUp.checkEmailAvailability(email);
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!(await checkEmailAvailability())) {
-      showAlert("Email already exists, Please enter another email", "error");
-      return;
+    setIsLoading(true);
+
+    try {
+      if (!(await checkEmailAvailability())) {
+        showAlert("Email already exists, Please enter another email", "error");
+        return;
+      }
+
+      const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
+
+      const formData = {
+        ...savedData,
+        email,
+      };
+      localStorage.setItem("formData", JSON.stringify(formData));
+      router.push("/signup/registrationform");
+    } catch {
+      showAlert("Something went wrong. Please try again.", "error");
+    } finally {
+      setIsLoading(false);
     }
-
-    const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
-
-    const formData = {
-      ...savedData,
-      email,
-    };
-    localStorage.setItem("formData", JSON.stringify(formData));
-    router.push("/signup/registrationform");
   };
 
   const handleGoogleSignIn = async () => {
@@ -62,7 +71,7 @@ export default function CreateAccount() {
         <main className="p-4 max-w-md mx-auto">
           <div className="mb-8">
             <h2 className="text-2xl font-bold mb-2">
-              Let's create your account
+              Let&apos;s create your account
             </h2>
             <p className="text-gray-600">
               Never fill long forms again + get discounts on future flagships
@@ -82,14 +91,23 @@ export default function CreateAccount() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter Email"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                disabled={isLoading}
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-md text-sm font-medium transition-colors"
+              disabled={isLoading}
+              className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 disabled:cursor-not-allowed text-white py-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center"
             >
-              Sign Up
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Signing Up...
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </button>
 
             <div className="relative">
@@ -104,7 +122,8 @@ export default function CreateAccount() {
             <button
               onClick={handleGoogleSignIn}
               type="button"
-              className="w-full border border-gray-300 hover:bg-gray-50 py-4 rounded-md text-sm font-medium transition-colors"
+              disabled={isLoading}
+              className="w-full border border-gray-300 hover:bg-gray-50 disabled:bg-gray-100 disabled:cursor-not-allowed py-4 rounded-md text-sm font-medium transition-colors"
             >
               Sign Up with Google
             </button>
