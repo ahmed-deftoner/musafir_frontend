@@ -1,19 +1,28 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Navigation from '../navigation';
-import withAuth from '@/hoc/withAuth';
-import useUserHandler from '@/hooks/useUserHandler';
-import { LogOut } from 'lucide-react';
-import { signOut } from 'next-auth/react';
+"use client";
+import { useState, useEffect } from "react";
+import Navigation from "../navigation";
+import withAuth from "@/hoc/withAuth";
+import useUserHandler from "@/hooks/useUserHandler";
+import { LogOut, Key } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { User } from "@/interfaces/login";
 
 function UserSettings() {
-  const [userData, setUserData] = useState<any>({});
+  const [userData, setUserData] = useState<User>({} as User);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const userHandler = useUserHandler();
+  const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/login` || '/login' });
+    await signOut({
+      callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/login` || "/login",
+    });
+  };
+
+  const handleResetPassword = () => {
+    router.push("/reset-password");
   };
 
   const fetchUserData = async () => {
@@ -23,7 +32,8 @@ function UserSettings() {
       setUserData(response);
       setIsLoading(false);
     } catch (err) {
-      setError('Failed to load user data');
+      console.error("Error fetching user data:", err);
+      setError("Failed to load user data");
       setIsLoading(false);
     }
   };
@@ -41,92 +51,113 @@ function UserSettings() {
   }
 
   return (
-    <div className='min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0'>
-      <div className='bg-white w-full max-w-md mx-auto rounded-lg h-screen'>
+    <div className="min-h-screen w-full bg-white md:flex md:items-center md:justify-center p-0">
+      <div className="bg-white w-full max-w-md mx-auto rounded-lg h-screen">
         <Navigation />
 
-        <div className='flex-1 flex flex-col overflow-hidden'>
-          <main className='flex-1 overflow-y-auto bg-white h-full'>
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <main className="flex-1 overflow-y-auto bg-white h-full">
             {error && (
               <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
                 {error}
               </div>
             )}
-            <header className='flex items-center justify-center p-2 mt-2'>
-              <h1 className='text-2xl font-semibold'>User Settings</h1>
+            <header className="flex items-center justify-center p-2 mt-2">
+              <h1 className="text-2xl font-semibold">User Settings</h1>
             </header>
-            <form className='space-y-6 h-full p-6'>
+            <form className="space-y-6 h-full p-6">
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>Full Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name
+                </label>
                 <input
-                  type='text'
-                  name='fullName'
-                  value={userData.fullName}
+                  type="text"
+                  name="fullName"
+                  value={userData.fullName || ""}
                   disabled
                   required
-                  className='w-full px-3 py-2 border rounded-md disabled:bg-gray-100'
+                  className="w-full px-3 py-2 border rounded-md disabled:bg-gray-100"
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>Email</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email
+                </label>
                 <input
-                  type='email'
-                  name='email'
-                  value={userData.email}
+                  type="email"
+                  name="email"
+                  value={userData.email || ""}
                   disabled
                   required
-                  className='w-full px-3 py-2 border rounded-md disabled:bg-gray-100'
+                  className="w-full px-3 py-2 border rounded-md disabled:bg-gray-100"
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>Phone</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone
+                </label>
                 <input
-                  type='tel'
-                  name='phone'
-                  value={userData.phone}
+                  type="tel"
+                  name="phone"
+                  value={userData.phone || ""}
                   disabled
                   required
-                  className='w-full px-3 py-2 border rounded-md disabled:bg-gray-100'
+                  className="w-full px-3 py-2 border rounded-md disabled:bg-gray-100"
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>CNIC</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  CNIC
+                </label>
                 <input
-                  type='text'
-                  name='cnic'
-                  value={userData.cnic}
+                  type="text"
+                  name="cnic"
+                  value={userData.cnic || ""}
                   disabled
                   required
-                  className='w-full px-3 py-2 border rounded-md disabled:bg-gray-100'
+                  className="w-full px-3 py-2 border rounded-md disabled:bg-gray-100"
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>Referral ID</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Referral ID
+                </label>
                 <input
-                  type='text'
-                  name='referralID'
-                  value={userData.referralID}
+                  type="text"
+                  name="referralID"
+                  value={userData.referralID || ""}
                   disabled
-                  className='w-full px-3 py-2 border rounded-md bg-gray-100'
+                  className="w-full px-3 py-2 border rounded-md bg-gray-100"
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>Verification Status</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Verification Status
+                </label>
                 <input
-                  type='text'
-                  name='verificationStatus'
-                  value={userData.verification.status}
+                  type="text"
+                  name="verificationStatus"
+                  value={
+                    userData.verification?.status ? "Verified" : "Not Verified"
+                  }
                   disabled
-                  className='w-full px-3 py-2 border rounded-md disabled:bg-gray-100'
+                  className="w-full px-3 py-2 border rounded-md disabled:bg-gray-100"
                 />
               </div>
             </form>
-            <div className='flex justify-end px-6 mt-4'>
+            <div className="flex flex-col gap-3 px-6 mt-4">
+              <button
+                onClick={handleResetPassword}
+                className="flex items-center justify-center gap-2 px-5 py-3 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 rounded-md transition-colors"
+              >
+                <Key className="w-5 h-5" />
+                Reset Password
+              </button>
               <button
                 onClick={handleLogout}
-                className='flex items-center gap-2 px-5 py-3 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-orange-500 hover:text-white rounded-md transition-colors'
+                className="flex items-center gap-2 px-5 py-3 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-orange-500 hover:text-white rounded-md transition-colors"
               >
-                <LogOut className='w-5 h-5' />
+                <LogOut className="w-5 h-5" />
                 Logout
               </button>
             </div>
@@ -137,4 +168,4 @@ function UserSettings() {
   );
 }
 
-export default withAuth(UserSettings); 
+export default withAuth(UserSettings);

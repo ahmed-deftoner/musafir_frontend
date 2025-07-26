@@ -32,6 +32,7 @@ const endpoints = {
   },
   USER: {
     GET_ME: "/user/me",
+    RESET_PASSWORD: "/user/reset-password",
   },
 };
 export default endpoints;
