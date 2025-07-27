@@ -22,7 +22,7 @@ function UserSettings() {
   };
 
   const handleResetPassword = () => {
-    router.push("/reset-password");
+    router.push("/change-password");
   };
 
   const fetchUserData = async () => {

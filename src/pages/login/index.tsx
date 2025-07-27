@@ -143,6 +143,15 @@ export default function Login() {
               {error && <p style={{ color: "red" }}>{error}</p>}
             </div>
 
+            <div className="text-right">
+              <Link
+                href="/forgot-password"
+                className="text-orange-500 hover:text-orange-600 text-sm font-medium"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+
             <button
               type="submit"
               disabled={isLoading}
