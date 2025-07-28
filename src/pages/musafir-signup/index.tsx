@@ -96,20 +96,22 @@ export default function MusafirSignup() {
                             )}
                         </div>
 
-                        <button
-                            type="submit"
-                            disabled={isLoading || !emailOrPhone.trim()}
-                            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 disabled:cursor-not-allowed text-white py-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center"
-                        >
-                            {isLoading ? (
-                                <>
-                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                    Finding Account...
-                                </>
-                            ) : (
-                                "Find My Account"
-                            )}
-                        </button>
+                        {!error.includes('already exists') && (
+                            <button
+                                type="submit"
+                                disabled={isLoading || !emailOrPhone.trim()}
+                                className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 disabled:cursor-not-allowed text-white py-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center"
+                            >
+                                {isLoading ? (
+                                    <>
+                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                        Finding Account...
+                                    </>
+                                ) : (
+                                    "Find My Account"
+                                )}
+                            </button>
+                        )}
                     </form>
 
                     {error && (
