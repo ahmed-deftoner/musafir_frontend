@@ -6,6 +6,8 @@ const endpoints = {
   VERIFY_EMAIL: "/user/verify-email",
   CHECK_EMAIL_AVAILABILITY: "/user/check-email-availability",
   REQUEST_VERIFICATION: "/user/request-verification",
+  FIND_USER: "/user/find-user",
+  VERIFY_MUSAFIR_EMAIL: "/user/verify-musafir-email",
   FLAGSHIP: {
     FILTER: "/flagship",
     CREATE: "/flagship",
