@@ -4,11 +4,13 @@ import { useRouter } from "next/navigation";
 import useCustomHook from "@/hooks/useSignUp";
 import { BaseUser } from "@/interfaces/signup";
 import useRegistrationHook from "@/hooks/useRegistrationHandler";
+import { useSession } from "next-auth/react";
 
 export default function AdditionalInfo() {
   const router = useRouter();
   const action = useCustomHook();
   const registrationAction = useRegistrationHook();
+  const { data: session } = useSession();
   const [university, setUniversity] = useState("LUM");
   const [cnic, setCnic] = useState("");
   const [city, setCity] = useState("");
@@ -16,6 +18,7 @@ export default function AdditionalInfo() {
   const [flagshipId, setFlagshipId] = useState(null);
   const [employmentStatus, setEmploymentStatus] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isGoogleLogin, setIsGoogleLogin] = useState<boolean>(false);
 
   useEffect(() => {
     const flagshipId = localStorage.getItem("flagshipId");
@@ -31,7 +34,15 @@ export default function AdditionalInfo() {
       setCity(savedData?.city || "");
       setEmploymentStatus(savedData?.employmentStatus || "");
     }
-  }, []);
+    
+    // Check if user is coming from Google login flow
+    // Only set as Google login if session exists AND we don't have a password in formData
+    if (session?.accessToken ) {
+      setIsGoogleLogin(true);
+    } else {
+      setIsGoogleLogin(false);
+    }
+  }, [session]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,33 +60,42 @@ export default function AdditionalInfo() {
       };
       localStorage.setItem("formData", JSON.stringify(formData));
 
-      const payload: BaseUser = { ...formData };
-      const { userId, verificationId } = (await action.register(payload)) as {
-        userId: string;
-        verificationId: string;
-      };
+      // Different flow for Google login vs password login
+      if (isGoogleLogin) {
+        // For Google login, we already have authentication, so just save the data
+        // and redirect to verification page
+        localStorage.setItem("formData", JSON.stringify(formData));
+        router.push("/verification");
+      } else {
+        // For password login, continue with the original flow
+        const payload: BaseUser = { ...formData };
+        const { userId, verificationId } = (await action.register(payload)) as {
+          userId: string;
+          verificationId: string;
+        };
 
-      if (flagshipId) {
-        const registration = JSON.parse(
-          localStorage.getItem("registration") || "{}"
-        );
-        registration.userId = userId;
-        if (registration) {
-          const { registrationId } = (await registrationAction.create(
-            registration
-          )) as { registrationId: string; message: string };
-          localStorage.setItem(
-            "registrationId",
-            JSON.stringify(registrationId)
+        if (flagshipId) {
+          const registration = JSON.parse(
+            localStorage.getItem("registration") || "{}"
           );
+          registration.userId = userId;
+          if (registration) {
+            const { registrationId } = (await registrationAction.create(
+              registration
+            )) as { registrationId: string; message: string };
+            localStorage.setItem(
+              "registrationId",
+              JSON.stringify(registrationId)
+            );
+          }
         }
+        const storeData = {
+          ...formData,
+          verificationId,
+        };
+        localStorage.setItem("formData", JSON.stringify(storeData));
+        router.push("/signup/email-verify");
       }
-      const storeData = {
-        ...formData,
-        verificationId,
-      };
-      localStorage.setItem("formData", JSON.stringify(storeData));
-      router.push("/signup/email-verify");
     } catch (error) {
       console.error("Registration error:", error);
     } finally {
@@ -263,23 +283,55 @@ export default function AdditionalInfo() {
               />
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 disabled:cursor-not-allowed text-black py-4 rounded-md text-sm font-medium transition-colors mt-8 flex items-center justify-center"
-            >
-              {isLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
-                  {flagshipId ? "Processing..." : "Processing..."}
-                </>
-              ) : flagshipId ? (
-                "Flagship Preferences"
-              ) : (
-                "Get Password"
-              )}
-            </button>
+            {/* Submit Button or Verification Buttons based on login flow */}
+            {isGoogleLogin ? (
+              <div className='space-y-3 mt-8'>
+                {/* Musafir Verification */}
+                <div className="space-y-2">
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 disabled:cursor-not-allowed text-black py-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center"
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      "Musafir Verification"
+                    )}
+                  </button>
+                </div>
+                {/* Skip Verification for now */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => router.push('/signup/accountCreated')}
+                    className="w-full bg-gray-200 hover:bg-gray-300 text-black py-4 rounded-md text-sm font-medium transition-colors"
+                  >
+                    Skip Verification for now
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 disabled:cursor-not-allowed text-black py-4 rounded-md text-sm font-medium transition-colors mt-8 flex items-center justify-center"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                    {flagshipId ? "Processing..." : "Processing..."}
+                  </>
+                ) : flagshipId ? (
+                  "Flagship Preferences"
+                ) : (
+                  "Get Password"
+                )}
+              </button>
+            )}
           </form>
         </div>
       </div>

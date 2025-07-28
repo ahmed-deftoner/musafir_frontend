@@ -72,7 +72,7 @@ export default function Login() {
   const handleGoogleSignIn = async () => {
     // Initiate Google sign-in with a redirect state
     await signIn("google", {
-      callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/home` || "/home", // Redirect after login
+      callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/signup/registrationform` || "/signup/registrationform", // Redirect to registration form for phone number entry
     });
   };
 
