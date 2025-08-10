@@ -30,8 +30,54 @@ export function PaymentsContainer({
   onRefundAction,
 }: PaymentsContainerProps) {
   const router = useRouter();
+
   const isRefund = (item: IPayment | IRefund): item is IRefund => {
     return "reason" in item;
+  };
+
+  // Helper functions to safely access nested properties
+  const getSafeUserName = (item: IPayment | IRefund): string => {
+    const registration = item.registration;
+    if (typeof registration === 'string') {
+      return 'User ID: ' + registration;
+    }
+    const user = registration.user;
+    if (typeof user === 'string') {
+      return 'User ID: ' + user;
+    }
+    return user?.fullName || 'Unknown User';
+  };
+
+  const getSafePaymentAmount = (item: IRefund): string => {
+    const registration = item.registration;
+    if (typeof registration === 'string') {
+      return 'N/A';
+    }
+    const payment = registration.payment;
+    if (typeof payment === 'string') {
+      return 'N/A';
+    }
+    return payment?.amount?.toLocaleString() || 'N/A';
+  };
+
+  const getSafePaymentDate = (item: IRefund): string => {
+    const registration = item.registration;
+    if (typeof registration === 'string') {
+      return 'N/A';
+    }
+    const payment = registration.payment;
+    if (typeof payment === 'string') {
+      return 'N/A';
+    }
+    return payment?.createdAt ? new Date(payment.createdAt).toLocaleDateString() : 'N/A';
+  };
+
+  const getSafeBankName = (item: IPayment): string => {
+    const bankAccount = item.bankAccount;
+    if (typeof bankAccount === 'string') {
+      return 'N/A';
+    }
+    return bankAccount?.bankName || 'N/A';
   };
 
   const handleViewDetails = (paymentId: string) => {
@@ -47,12 +93,10 @@ export function PaymentsContainer({
         >
           <CardHeader className="pb-2">
             <h3 className="text-lg font-semibold">
-              {isRefund(item)
-                ? ((item.registration as IRegistration).user as IUser).fullName
-                : ((item.registration as IRegistration).user as IUser).fullName}
+              {getSafeUserName(item)}
             </h3>
             <p className="text-sm text-gray-500">
-              {new Date(item.createdAt).toLocaleDateString()}
+              {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A'}
             </p>
           </CardHeader>
           <CardContent>
@@ -63,21 +107,13 @@ export function PaymentsContainer({
                     <span className="text-gray-600">Payment Amount</span>
                     <span className="font-medium">
                       Rs.{" "}
-                      {(
-                        (item.registration as IRegistration)
-                          .payment as unknown as IPayment
-                      ).amount.toLocaleString()}
+                      {getSafePaymentAmount(item)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Payment Date</span>
                     <span className="font-medium">
-                      {new Date(
-                        (
-                          (item.registration as IRegistration)
-                            .payment as unknown as IPayment
-                        ).createdAt
-                      ).toLocaleDateString()}
+                      {getSafePaymentDate(item)}
                     </span>
                   </div>
                 </div>
@@ -90,21 +126,21 @@ export function PaymentsContainer({
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-600">Rating</span>
-                          <span className="font-medium">{item.rating}/5</span>
+                          <span className="font-medium">{item.rating || 'N/A'}/5</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Reason</span>
-                          <span className="font-medium">{item.reason}</span>
+                          <span className="font-medium">{item.reason || 'N/A'}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Bank Details</span>
                           <span className="font-medium">
-                            {item.bankDetails}
+                            {item.bankDetails || 'N/A'}
                           </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Feedback</span>
-                          <span className="font-medium">{item.feedback}</span>
+                          <span className="font-medium">{item.feedback || 'N/A'}</span>
                         </div>
                       </div>
                     </AccordionContent>
@@ -116,29 +152,29 @@ export function PaymentsContainer({
                 <div className="flex justify-between">
                   <span className="text-gray-600">Amount</span>
                   <span className="font-medium">
-                    Rs. {item.amount.toLocaleString()}
+                    Rs. {item.amount?.toLocaleString() || 'N/A'}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Bank</span>
                   <span className="font-medium">
-                    {(item?.bankAccount as IBankAccount)?.bankName}
+                    {getSafeBankName(item)}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Type</span>
                   <span className="font-medium capitalize">
-                    {item.paymentType}
+                    {item.paymentType || 'N/A'}
                   </span>
                 </div>
-                {item.discount && item.discount > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Discount Applied</span>
-                    <span className="font-medium text-green-600">
-                      Rs. {item.discount.toLocaleString()}
-                    </span>
-                  </div>
-                )}
+                {/* {item.discount && item.discount > 0 && ( */}
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Discount Applied</span>
+                  <span className="font-medium text-green-600">
+                    Rs. {item.discount?.toLocaleString() || 'N/A'}
+                  </span>
+                </div>
+                {/* )} */}
               </div>
             )}
           </CardContent>
