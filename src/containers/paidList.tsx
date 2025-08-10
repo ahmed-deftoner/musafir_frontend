@@ -43,19 +43,21 @@ export const PaidListContainer = () => {
     <div className="p-4 space-y-4">
       <div className="flex space-x-2 mb-4">
         <button
-          className={`px-4 py-2 rounded-full text-sm font-medium ${paymentFilter === "fullPayment"
+          className={`px-4 py-2 rounded-full text-sm font-medium ${
+            paymentFilter === "fullPayment"
               ? "bg-black text-white"
               : "bg-gray-200 text-gray-800"
-            }`}
+          }`}
           onClick={() => setPaymentFilter("fullPayment")}
         >
           Full Payment
         </button>
         <button
-          className={`px-4 py-2 rounded-full text-sm font-medium ${paymentFilter === "partialPayment"
+          className={`px-4 py-2 rounded-full text-sm font-medium ${
+            paymentFilter === "partialPayment"
               ? "bg-black text-white"
               : "bg-gray-200 text-gray-800"
-            }`}
+          }`}
           onClick={() => setPaymentFilter("partialPayment")}
         >
           Partial Payment
@@ -122,15 +124,16 @@ export const PaidListContainer = () => {
                   <span className="text-gray-400 text-sm">PKR</span>
                 </div>
 
-                {(r.payment as IPayment)?.discount && (r.payment as IPayment).discount > 0 && (
-                  <>
-                    <div className="text-gray-500">Discount</div>
-                    <div className="text-right font-medium text-green-600">
-                      {(r.payment as IPayment).discount}{" "}
-                      <span className="text-gray-400 text-sm">PKR</span>
-                    </div>
-                  </>
-                )}
+                {(r.payment as IPayment)?.discount &&
+                  (r.payment as IPayment)?.discount !== 0 && (
+                    <>
+                      <div className="text-gray-500">Discount</div>
+                      <div className="text-right font-medium text-green-600">
+                        {(r.payment as IPayment).discount}{" "}
+                        <span className="text-gray-400 text-sm">PKR</span>
+                      </div>
+                    </>
+                  )}
 
                 <div className="text-gray-500">Status</div>
                 <div className="text-right">

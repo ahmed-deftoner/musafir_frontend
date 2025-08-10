@@ -21,7 +21,7 @@ export class PaymentService {
       );
       return data;
     } catch (error) {
-      console.error('Error fetching user discount:', error);
+      console.error("Error fetching user discount:", error);
       return 0;
     }
   }
@@ -49,7 +49,7 @@ export class PaymentService {
       formData.append("bankAccount", payment.bankAccount);
       formData.append("paymentType", payment.paymentType);
       formData.append("amount", payment.amount.toString());
-      formData.append("discount", payment.discount.toString());
+      formData.append("discount", payment.discount?.toString() || "0");
       formData.append("screenshot", payment.screenshot);
 
       const { data } = await axios.post(
