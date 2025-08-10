@@ -28,7 +28,7 @@ const withAuth = <P extends object>(
 
     const handleSignOut = async () => {
       await signOut({
-        callbackUrl: `https://main.d1gcdykopg01ak.amplifyapp.com//login`,
+        callbackUrl: `${process.env.NEXTAUTH_UR}/login`,
       });
     };
 

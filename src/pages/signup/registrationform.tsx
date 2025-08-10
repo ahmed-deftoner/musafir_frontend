@@ -1,8 +1,10 @@
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function RegistrationForm() {
   const router = useRouter()
+  const { data: session, status } = useSession()
   const [gender, setGender] = useState('female')
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
@@ -22,7 +24,12 @@ export default function RegistrationForm() {
       setFullName(savedData?.fullName || '');
       setPhone(savedData?.phone || '');
     }
-  }, []);
+
+    // Pre-fill form with Google OAuth data if available
+    if (session?.user) {
+      setFullName(session.user.name || savedData?.fullName || '');
+    }
+  }, [status, session, router]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -32,6 +39,18 @@ export default function RegistrationForm() {
     localStorage.setItem("formData", JSON.stringify(formData));
     router.push(flagshipId ? '/flagship/flagship-requirement' : '/signup/additionalinfo')
   };
+
+  // Show loading state while session is being loaded
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 md:flex md:items-center md:justify-center p-0">

@@ -42,15 +42,8 @@ export default function CreateAccount() {
   };
 
   const handleGoogleSignIn = async () => {
-    const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     await signIn("google", {
-      callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/login` || "/login",
-      cnic: savedData?.cnic || "",
-      fullName: savedData?.fullName || "",
-      gender: savedData?.gender || "",
-      phone: savedData?.phone || "",
-      socialLink: savedData?.socialLink || "",
-      university: savedData?.university || "",
+      callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_URL}/signup/registrationform` || "/signup/registrationform", 
     });
   };
 
