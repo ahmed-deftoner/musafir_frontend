@@ -29,11 +29,38 @@ function FlagshipRequirements() {
   const [selectedRoomSharingPrice, setSelectedRoomSharingPrice] = useState(0);
   const registrationAction = useRegistrationHook();
 
+  const recalculateTotalPrice = () => {
+    const basePrice = Number(flagship?.basePrice) || 0;
+    const locationPrice = selectedLocationPrice;
+    const tierPrice = selectedTierPrice;
+    const roomSharingPrice = selectedRoomSharingPrice;
+    const mattressPrice = sleepPreference === 'bed' ? Number(flagship?.mattressTiers?.[0]?.price || 0) : 0;
+
+    const totalPrice = basePrice + locationPrice + tierPrice + roomSharingPrice + mattressPrice;
+
+    return totalPrice;
+  };
+
   const getFlagship = async (flagshipId: any) => {
     const response = await action.getFlagship(flagshipId);
     const basePrice = Number(response.basePrice) || 0;
-    setPrice(basePrice);
+
     setFlagship(response);
+
+    if (!city && response.locations && response.locations.length > 0) {
+      const firstEnabledLocation = response.locations.find((loc: any) => loc.enabled);
+      if (firstEnabledLocation) {
+        console.log('Pre-selecting location:', firstEnabledLocation.name, 'Price:', firstEnabledLocation.price);
+        setCity(firstEnabledLocation.name);
+        setSelectedLocationPrice(Number(firstEnabledLocation.price) || 0);
+
+        const locationPrice = Number(firstEnabledLocation.price) || 0;
+        const totalPrice = basePrice + locationPrice;
+        setPrice(totalPrice);
+      }
+    } else {
+      setPrice(basePrice);
+    }
   };
 
   useEffect(() => {
@@ -58,12 +85,53 @@ function FlagshipRequirements() {
         setTripType(registration.tripType);
         setGroupMembers(registration.groupMembers);
         setExpectations(registration.expectations);
-        setPrice(Number(registration.price) || 0);
+
+        if (registration.joiningFromCity && flagship?.locations) {
+          const locationPrice = Number(flagship.locations.find((loc: any) => loc.name === registration.joiningFromCity)?.price) || 0;
+          setSelectedLocationPrice(locationPrice);
+        }
+
+        if (registration.tier && flagship?.tiers) {
+          const tierPrice = Number(flagship.tiers.find((tier: any) => tier.name === registration.tier)?.price) || 0;
+          setSelectedTierPrice(tierPrice);
+        }
+
+        if (registration.roomSharing && flagship?.roomSharingPreference) {
+          const roomSharingPrice = Number(flagship.roomSharingPreference.find((pref: any) =>
+            (pref.name === "Twin Sharing" ? "twin" : "default") === registration.roomSharing
+          )?.price) || 0;
+          setSelectedRoomSharingPrice(roomSharingPrice);
+        }
+
+        if (registration.price && Number(registration.price) > 0) {
+          setPrice(Number(registration.price));
+        } else {
+          const basePrice = Number(flagship?.basePrice) || 0;
+          const locationPrice = registration.joiningFromCity ?
+            Number(flagship?.locations?.find((loc: any) => loc.name === registration.joiningFromCity)?.price) || 0 : 0;
+          setPrice(basePrice + locationPrice);
+        }
       }
     };
 
     fetchData();
   }, [searchParams]);
+
+  useEffect(() => {
+    if (flagship) {
+      const newPrice = recalculateTotalPrice();
+      setPrice(newPrice);
+    }
+  }, [selectedLocationPrice, selectedTierPrice, selectedRoomSharingPrice, sleepPreference, flagship]);
+
+  useEffect(() => {
+    if (flagship && city && !selectedLocationPrice) {
+      const locationPrice = Number(flagship.locations?.find((loc: any) => loc.name === city)?.price) || 0;
+      if (locationPrice > 0) {
+        setSelectedLocationPrice(locationPrice);
+      }
+    }
+  }, [flagship, city, selectedLocationPrice]);
 
   const handleExpectationsChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -248,15 +316,8 @@ function FlagshipRequirements() {
                         value={location.name}
                         checked={city === location.name}
                         onChange={() => {
-                          if (city && selectedLocationPrice > 0) {
-                            setPrice(
-                              (prevPrice) => prevPrice - selectedLocationPrice
-                            );
-                          }
                           setCity(location.name);
-                          const newLocationPrice = Number(location.price);
-                          setSelectedLocationPrice(newLocationPrice);
-                          setPrice((prevPrice) => prevPrice + newLocationPrice);
+                          setSelectedLocationPrice(Number(location.price));
                         }}
                         className="sr-only peer"
                       />
@@ -283,13 +344,8 @@ function FlagshipRequirements() {
                       value={tier.name}
                       checked={tiers === tier.name}
                       onChange={() => {
-                        if (tiers && selectedTierPrice > 0) {
-                          setPrice(prevPrice => prevPrice - selectedTierPrice);
-                        }
                         setTiers(tier.name);
-                        const newTierPrice = Number(tier.price);
-                        setSelectedTierPrice(newTierPrice);
-                        setPrice(prevPrice => prevPrice + newTierPrice);
+                        setSelectedTierPrice(Number(tier.price));
                       }}
                       className="sr-only peer"
                     />
@@ -303,12 +359,9 @@ function FlagshipRequirements() {
                     type="radio"
                     name="tier"
                     value="Standard"
-                    checked={true}
+                    checked={tiers === "Standard"}
                     onChange={() => {
-                      if (tiers && selectedTierPrice > 0) {
-                        setPrice((prevPrice) => prevPrice - selectedTierPrice);
-                      }
-                      setTiers("Standard");
+                      setTiers('Standard');
                       setSelectedTierPrice(0);
                     }}
                     className="sr-only peer"
@@ -331,9 +384,6 @@ function FlagshipRequirements() {
                   value="default"
                   checked={roomSharing === "default"}
                   onChange={() => {
-                    if (roomSharing !== "default") {
-                      setPrice(prevPrice => prevPrice - selectedRoomSharingPrice);
-                    }
                     setRoomSharing('default');
                     setSelectedRoomSharingPrice(0);
                   }}
@@ -350,11 +400,6 @@ function FlagshipRequirements() {
                     value={preference.name}
                     checked={roomSharing === (preference.name === "Twin Sharing" ? "twin" : "default")}
                     onChange={() => {
-                      if (roomSharing === "default") {
-                        setPrice(prevPrice => prevPrice + Number(preference.price));
-                      } else if (roomSharing !== preference.name) {
-                        setPrice(prevPrice => prevPrice - selectedRoomSharingPrice + Number(preference.price));
-                      }
                       setRoomSharing(preference.name === "Twin Sharing" ? "twin" : "default");
                       setSelectedRoomSharingPrice(Number(preference.price));
                     }}
@@ -381,11 +426,6 @@ function FlagshipRequirements() {
                   value="mattress"
                   checked={sleepPreference === "mattress"}
                   onChange={() => {
-                    if (sleepPreference == "bed" && flagship?.mattressTiers?.[0]?.price) {
-                      setPrice(
-                        price - Number(flagship?.mattressTiers[0].price)
-                      );
-                    }
                     setSleepPreference("mattress");
                   }}
                   className="sr-only peer"
@@ -403,9 +443,6 @@ function FlagshipRequirements() {
                   value="bed"
                   checked={sleepPreference === "bed"}
                   onChange={() => {
-                    if (sleepPreference == "mattress") {
-                      setPrice(price + Number(flagship?.mattressTiers?.[0]?.price || 0));
-                    }
                     setSleepPreference("bed");
                   }}
                   className="sr-only peer"

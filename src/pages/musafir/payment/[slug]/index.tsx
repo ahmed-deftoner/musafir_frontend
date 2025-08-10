@@ -40,11 +40,14 @@ export default function TripPayment() {
   const [paymentType, setPaymentType] = useState<"full" | "partial">("full");
   const [partialAmount, setPartialAmount] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [discountEnabled, setDiscountEnabled] = useState<boolean>(false);
+  const [discountAmount, setDiscountAmount] = useState<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const registrationHook = useRegistrationHook();
   const [registration, setRegistration] = useState<any>(null);
 
   const totalAmount = registration?.price;
+  const finalAmount = discountEnabled ? Math.max(0, totalAmount - discountAmount) : totalAmount;
 
   const handleCopy = async (text: string) => {
     try {
@@ -87,6 +90,26 @@ export default function TripPayment() {
     fetchRegistration();
   }, [registrationId]);
 
+  // Calculate discount when registration is loaded
+  useEffect(() => {
+    if (registration?.user?._id) {
+      // Calculate discount based on user's past trips
+      calculateUserDiscount(registration.user._id);
+    }
+  }, [registration]);
+
+  // Function to calculate discount based on user's past trips
+  const calculateUserDiscount = async (userId: string) => {
+    try {
+      // Get user discount by registration ID
+      const discount = await PaymentService.getUserDiscountByRegistration(registrationId);
+      setDiscountAmount(discount);
+    } catch (error) {
+      console.error('Error calculating discount:', error);
+      setDiscountAmount(0);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!file) {
       toast({
@@ -110,7 +133,8 @@ export default function TripPayment() {
         registration: registrationId,
         bankAccount: "680929fef52e643c2a724217",
         paymentType: paymentType === "full" ? "fullPayment" : "partialPayment",
-        amount: paymentType === "full" ? totalAmount : partialAmount,
+        amount: paymentType === "full" ? finalAmount : partialAmount,
+        discount: discountEnabled ? discountAmount : 0,
         screenshot: file,
       });
 
@@ -135,7 +159,7 @@ export default function TripPayment() {
   };
 
   return (
-     <div className="flex justify-center min-h-screen bg-gray-50">
+    <div className="flex justify-center min-h-screen bg-gray-50">
       {registrationId && <div className="w-full max-w-md">
         <div className="flex flex-col min-h-screen bg-white">
           {/* Header */}
@@ -219,7 +243,7 @@ export default function TripPayment() {
                       setPartialAmount(value ? Number(value) : 0);
                     }}
                     min="0"
-                    max={totalAmount}
+                    max={finalAmount}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     placeholder="Enter amount"
                     style={{
@@ -228,11 +252,42 @@ export default function TripPayment() {
                     }}
                   />
                 </div>
-                {partialAmount > totalAmount && (
+                {partialAmount > finalAmount && (
                   <p className="text-red-500 text-sm mt-1">
-                    Amount cannot exceed total amount
+                    Amount cannot exceed final amount
                   </p>
                 )}
+              </div>
+            )}
+          </div>
+
+          {/* Discount Section */}
+          <div className="bg-gray-100 rounded-lg mx-4 p-4 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-gray-700 font-medium">Discount Applicable</span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={discountEnabled}
+                  onChange={(e) => setDiscountEnabled(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+              </label>
+            </div>
+
+            {discountEnabled && (
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Discount Amount:</span>
+                  <span className="font-semibold text-green-600">Rs. {discountAmount.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Final Amount:</span>
+                  <span className="font-bold text-xl text-orange-600">
+                    Rs. {finalAmount?.toLocaleString()}
+                  </span>
+                </div>
               </div>
             )}
           </div>

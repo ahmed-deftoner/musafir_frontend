@@ -45,6 +45,7 @@ export interface IPayment {
   _id: string;
   user: string;
   amount: number;
+  discount?: number;
   bankName: string;
   status: string;
   paymentType: string;

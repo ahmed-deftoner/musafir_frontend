@@ -14,6 +14,18 @@ export class PaymentService {
     return data;
   }
 
+  static async getUserDiscountByRegistration(registrationId: string) {
+    try {
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/payment/get-user-discount-by-registration/${registrationId}`
+      );
+      return data;
+    } catch (error) {
+      console.error('Error fetching user discount:', error);
+      return 0;
+    }
+  }
+
   static async createBankAccount(bankAccount: any) {
     const { data } = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/payment/create-bank-account`,
@@ -37,6 +49,7 @@ export class PaymentService {
       formData.append("bankAccount", payment.bankAccount);
       formData.append("paymentType", payment.paymentType);
       formData.append("amount", payment.amount.toString());
+      formData.append("discount", payment.discount.toString());
       formData.append("screenshot", payment.screenshot);
 
       const { data } = await axios.post(

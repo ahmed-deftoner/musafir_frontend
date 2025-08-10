@@ -181,6 +181,14 @@ export default function PaymentDetailsPage() {
                 Rs. {payment.amount.toLocaleString()}
               </span>
             </div>
+            {payment.discount && payment.discount > 0 && (
+              <div className="flex justify-between">
+                <span className="text-gray-600">Discount Applied</span>
+                <span className="font-medium text-green-600">
+                  Rs. {payment.discount.toLocaleString()}
+                </span>
+              </div>
+            )}
             {bankAccount ? (
               <>
                 <div className="flex justify-between">
