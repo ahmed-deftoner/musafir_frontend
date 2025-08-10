@@ -34,6 +34,7 @@ const endpoints = {
   },
   USER: {
     GET_ME: "/user/me",
+    UPDATE_ME: "/user/me",
     RESET_PASSWORD: "/user/reset-password",
     FORGOT_PASSWORD: "/user/forgot-password",
   },

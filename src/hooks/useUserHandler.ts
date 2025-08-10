@@ -9,6 +9,12 @@ interface ResetPasswordData {
   confirmPassword: string;
 }
 
+interface UpdateUserData {
+  fullName?: string;
+  phone?: string;
+  cnic?: string;
+}
+
 const useUserHandler = () => {
   const { USER } = apiEndpoints;
 
@@ -21,9 +27,23 @@ const useUserHandler = () => {
     }
   };
 
+  const updateUser = async (data: UpdateUserData): Promise<User> => {
+    try {
+      const res = await api.patch(USER.UPDATE_ME, data);
+      if (res.statusCode === 200) {
+        return res.data;
+      } else {
+        throw new Error("Failed to update user data");
+      }
+    } catch (error) {
+      console.error("Update user error:", error);
+      throw error;
+    }
+  };
+
   const resetPassword = async (
     data: ResetPasswordData
-  ): Promise<{ message: string }> => {
+  ): Promise<{ message: string }> =>{
     try {
       const res = await api.post(USER.RESET_PASSWORD, data);
       return res.data;
@@ -35,6 +55,7 @@ const useUserHandler = () => {
 
   return {
     getMe,
+    updateUser,
     resetPassword,
   };
 };
