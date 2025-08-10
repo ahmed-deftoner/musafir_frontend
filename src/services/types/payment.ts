@@ -7,6 +7,7 @@ export interface ICreatePayment {
   paymentType: string;
   registration: string;
   amount: number;
+  discount?: number;
   screenshot: File;
 }
 
@@ -24,6 +25,7 @@ export interface IPayment {
   bankAccount: IBankAccount | string;
   paymentType: string;
   amount: number;
+  discount?: number;
   screenshot: string;
   status: string;
   createdAt: string;

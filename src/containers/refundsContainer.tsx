@@ -90,12 +90,12 @@ export const RefundsContainer = ({
                 <CardHeader className="pb-2">
                   <h3 className="text-lg font-semibold">
                     {
-                      ((refund?.registration as IRegistration).user as IUser)
-                        ?.fullName
+                      ((refund?.registration as IRegistration)?.user as IUser)
+                        ?.fullName || "Unknown User"
                     }
                   </h3>
                   <p className="text-sm text-gray-500">
-                    {new Date(refund.createdAt).toLocaleDateString()}
+                    {refund?.createdAt ? new Date(refund.createdAt).toLocaleDateString() : "N/A"}
                   </p>
                 </CardHeader>
                 <CardContent>
@@ -107,18 +107,41 @@ export const RefundsContainer = ({
                         {(
                           (refund?.registration as IRegistration)
                             ?.paymentId as unknown as IPayment
-                        ).amount.toLocaleString()}
+                        )?.amount?.toLocaleString() || "0"}
                       </span>
                     </div>
+                    {(
+                      (refund?.registration as IRegistration)
+                        ?.paymentId as unknown as IPayment
+                    )?.discount && (
+                      (refund?.registration as IRegistration)
+                        ?.paymentId as unknown as IPayment
+                    )?.discount > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Discount Applied</span>
+                          <span className="font-medium text-green-600">
+                            Rs.{" "}
+                            {(
+                              (refund?.registration as IRegistration)
+                                ?.paymentId as unknown as IPayment
+                            )?.discount?.toLocaleString() || "0"}
+                          </span>
+                        </div>
+                      )}
                     <div className="flex justify-between">
                       <span className="text-gray-600">Payment Date</span>
                       <span className="font-medium">
-                        {new Date(
-                          (
-                            (refund?.registration as IRegistration)
-                              ?.paymentId as unknown as IPayment
-                          ).createdAt
-                        ).toLocaleDateString()}
+                        {(
+                          (refund?.registration as IRegistration)
+                            ?.paymentId as unknown as IPayment
+                        )?.createdAt
+                          ? new Date(
+                            (
+                              (refund?.registration as IRegistration)
+                                ?.paymentId as unknown as IPayment
+                            ).createdAt
+                          ).toLocaleDateString()
+                          : "N/A"}
                       </span>
                     </div>
                   </div>
@@ -132,23 +155,23 @@ export const RefundsContainer = ({
                           <div className="flex justify-between">
                             <span className="text-gray-600">Rating</span>
                             <span className="font-medium">
-                              {refund.rating}/5
+                              {refund?.rating || "N/A"}/5
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Reason</span>
-                            <span className="font-medium">{refund.reason}</span>
+                            <span className="font-medium">{refund?.reason || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Bank Details</span>
                             <span className="font-medium">
-                              {refund.bankDetails}
+                              {refund?.bankDetails || "N/A"}
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Feedback</span>
                             <span className="font-medium">
-                              {refund.feedback}
+                              {refund?.feedback || "N/A"}
                             </span>
                           </div>
                         </div>
@@ -178,14 +201,15 @@ export const RefundsContainer = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() =>
-                      handleViewDetails(
-                        (
-                          (refund.registration as IRegistration)
-                            .paymentId as unknown as IPayment
-                        )._id
-                      )
-                    }
+                    onClick={() => {
+                      const paymentId = (
+                        (refund?.registration as IRegistration)
+                          ?.paymentId as unknown as IPayment
+                      )?._id;
+                      if (paymentId) {
+                        handleViewDetails(paymentId);
+                      }
+                    }}
                   >
                     View Details
                   </Button>
@@ -209,12 +233,12 @@ export const RefundsContainer = ({
                 <CardHeader className="pb-2">
                   <h3 className="text-lg font-semibold">
                     {
-                      ((refund.registration as IRegistration).user as IUser)
-                        .fullName
+                      ((refund?.registration as IRegistration)?.user as IUser)
+                        ?.fullName || "Unknown User"
                     }
                   </h3>
                   <p className="text-sm text-gray-500">
-                    {new Date(refund.createdAt).toLocaleDateString()}
+                    {refund?.createdAt ? new Date(refund.createdAt).toLocaleDateString() : "N/A"}
                   </p>
                 </CardHeader>
                 <CardContent>
@@ -224,20 +248,40 @@ export const RefundsContainer = ({
                       <span className="font-medium">
                         Rs.{" "}
                         {(
-                          (refund.registration as IRegistration)
-                            .paymentId as unknown as IPayment
-                        ).amount.toLocaleString()}
+                          (refund?.registration as IRegistration)
+                            ?.paymentId as unknown as IPayment
+                        )?.amount?.toLocaleString() || "0"}
                       </span>
                     </div>
+                    {(
+                      (refund?.registration as IRegistration)
+                        ?.paymentId as unknown as IPayment
+                    )?.discount > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Discount Applied</span>
+                          <span className="font-medium text-green-600">
+                            Rs.{" "}
+                            {(
+                              (refund?.registration as IRegistration)
+                                ?.paymentId as unknown as IPayment
+                            )?.discount?.toLocaleString() || "0"}
+                          </span>
+                        </div>
+                      )}
                     <div className="flex justify-between">
                       <span className="text-gray-600">Payment Date</span>
                       <span className="font-medium">
-                        {new Date(
-                          (
-                            (refund.registration as IRegistration)
-                              .paymentId as unknown as IPayment
-                          ).createdAt
-                        ).toLocaleDateString()}
+                        {(
+                          (refund?.registration as IRegistration)
+                            ?.paymentId as unknown as IPayment
+                        )?.createdAt
+                          ? new Date(
+                            (
+                              (refund?.registration as IRegistration)
+                                ?.paymentId as unknown as IPayment
+                            ).createdAt
+                          ).toLocaleDateString()
+                          : "N/A"}
                       </span>
                     </div>
                   </div>
@@ -251,23 +295,23 @@ export const RefundsContainer = ({
                           <div className="flex justify-between">
                             <span className="text-gray-600">Rating</span>
                             <span className="font-medium">
-                              {refund.rating}/5
+                              {refund?.rating || "N/A"}/5
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Reason</span>
-                            <span className="font-medium">{refund.reason}</span>
+                            <span className="font-medium">{refund?.reason || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Bank Details</span>
                             <span className="font-medium">
-                              {refund.bankDetails}
+                              {refund?.bankDetails || "N/A"}
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Feedback</span>
                             <span className="font-medium">
-                              {refund.feedback}
+                              {refund?.feedback || "N/A"}
                             </span>
                           </div>
                         </div>
@@ -289,14 +333,15 @@ export const RefundsContainer = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() =>
-                      handleViewDetails(
-                        (
-                          (refund.registration as IRegistration)
-                            .paymentId as unknown as IPayment
-                        )._id
-                      )
-                    }
+                    onClick={() => {
+                      const paymentId = (
+                        (refund?.registration as IRegistration)
+                          ?.paymentId as unknown as IPayment
+                      )?._id;
+                      if (paymentId) {
+                        handleViewDetails(paymentId);
+                      }
+                    }}
                   >
                     View Details
                   </Button>

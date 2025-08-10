@@ -4,6 +4,9 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/tabs";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { LogOut, User } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -23,9 +26,14 @@ import { RefundsContainer } from "@/containers/refundsContainer";
 import withAuth from "@/hoc/withAuth";
 import { ROLES } from "@/config/constants";
 import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { useRecoilValue } from "recoil";
+import { currentUser } from "@/store/signup";
 
 function AdminMainPage() {
   const router = useRouter();
+  const { data: session } = useSession();
+  const userData = useRecoilValue(currentUser);
   const [activeTab, setActiveTab] = useState("trips");
   const [activeSection, setActiveSection] = useState("past");
   const [trips, setTrips] = useState<{
@@ -57,6 +65,17 @@ function AdminMainPage() {
   });
   const [loading, setLoading] = useState(false);
   const [loadingCreateFlagship, setLoadingCreateFlagship] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<{
+    unverified: IUser[];
+    pendingVerification: IUser[];
+    verified: IUser[];
+  }>({
+    unverified: [],
+    pendingVerification: [],
+    verified: [],
+  });
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,6 +130,62 @@ function AdminMainPage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const timeoutId = setTimeout(async () => {
+      if (searchQuery.trim()) {
+        setIsSearching(true);
+        try {
+          const results = await UserService.searchAllUsers(searchQuery.trim());
+          setSearchResults(results);
+        } catch (error) {
+          console.error("Search error:", error);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults({
+          unverified: [],
+          pendingVerification: [],
+          verified: [],
+        });
+        setIsSearching(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
+
+  const getUsersToDisplay = () => {
+    if (searchQuery.trim()) {
+      return {
+        unverified: searchResults.unverified,
+        pendingVerification: searchResults.pendingVerification,
+        verified: searchResults.verified,
+      };
+    }
+    return users;
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut({
+        callbackUrl: "/login",
+      });
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
+  const getAdminName = () => {
+    if (userData?.fullName) {
+      return userData.fullName;
+    }
+    if (session?.user?.name) {
+      return session.user.name;
+    }
+    return "Admin";
+  };
+
   const handleRefundAction = async (
     id: string,
     action: "approve" | "reject"
@@ -157,11 +232,30 @@ function AdminMainPage() {
 
   return (
     <div className="max-w-md mx-auto pb-8">
-      <header className="sticky top-0 bg-white z-10">
+      {/* Admin Header */}
+      <div className="sticky top-0 bg-white z-20 border-b border-gray-200">
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center space-x-2">
+            <User className="h-5 w-5 text-gray-600" />
+            <span className="font-medium text-gray-800">{getAdminName()}</span>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSignOut}
+            className="flex items-center space-x-2"
+          >
+            <LogOut className="h-4 w-4" />
+            <span>Sign Out</span>
+          </Button>
+        </div>
+      </div>
+
+      <header className="sticky top-[65px] bg-white z-10">
         <Tabs
           defaultValue="trips"
           className="w-full"
-          onValueChange={(value) => {
+          onValueChange={(value: string) => {
             setActiveTab(value);
             if (value === "trips") {
               setActiveSection("past");
@@ -263,36 +357,67 @@ function AdminMainPage() {
         )}
 
         {activeTab === "users" && (
-          <div className="grid grid-cols-3 border-b">
-            <button
-              className={cn(
-                "py-3 text-center font-medium",
-                activeSection === "unverified" && "border-b-2 border-black"
-              )}
-              onClick={() => setActiveSection("unverified")}
-            >
-              Unverified
-            </button>
-            <button
-              className={cn(
-                "py-3 text-center font-medium",
-                activeSection === "pendingVerification" &&
+          <>
+            <div className="grid grid-cols-3 border-b">
+              <button
+                className={cn(
+                  "py-3 text-center font-medium",
+                  activeSection === "unverified" && "border-b-2 border-black"
+                )}
+                onClick={() => setActiveSection("unverified")}
+              >
+                Unverified
+                {searchQuery && (
+                  <span className="ml-1 text-sm text-gray-500">
+                    ({getUsersToDisplay().unverified.length})
+                  </span>
+                )}
+              </button>
+              <button
+                className={cn(
+                  "py-3 text-center font-medium",
+                  activeSection === "pendingVerification" &&
                   "border-b-2 border-black"
+                )}
+                onClick={() => setActiveSection("pendingVerification")}
+              >
+                Pending Verification
+                {searchQuery && (
+                  <span className="ml-1 text-sm text-gray-500">
+                    ({getUsersToDisplay().pendingVerification.length})
+                  </span>
+                )}
+              </button>
+              <button
+                className={cn(
+                  "py-3 text-center font-medium",
+                  activeSection === "verified" && "border-b-2 border-black"
+                )}
+                onClick={() => setActiveSection("verified")}
+              >
+                Verified
+                {searchQuery && (
+                  <span className="ml-1 text-sm text-gray-500">
+                    ({getUsersToDisplay().verified.length})
+                  </span>
+                )}
+              </button>
+            </div>
+            <div className="px-4 py-3">
+              <Input
+                type="text"
+                placeholder="Search users by name or email..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full"
+              />
+              {searchQuery && (
+                <p className="text-sm text-gray-500 mt-2">
+                  {isSearching ? "Searching..." : `Search results for "${searchQuery}"`}
+                </p>
               )}
-              onClick={() => setActiveSection("pendingVerification")}
-            >
-              Pending Verification
-            </button>
-            <button
-              className={cn(
-                "py-3 text-center font-medium",
-                activeSection === "verified" && "border-b-2 border-black"
-              )}
-              onClick={() => setActiveSection("verified")}
-            >
-              Verified
-            </button>
-          </div>
+            </div>
+          </>
         )}
 
         {activeTab === "payments" && (
@@ -310,7 +435,7 @@ function AdminMainPage() {
               className={cn(
                 "py-3 text-center font-medium",
                 activeSection === "completedPayments" &&
-                  "border-b-2 border-black"
+                "border-b-2 border-black"
               )}
               onClick={() => setActiveSection("completedPayments")}
             >
@@ -331,8 +456,8 @@ function AdminMainPage() {
                   activeSection === "past"
                     ? trips.past
                     : activeSection === "live"
-                    ? trips.live
-                    : trips.upcoming
+                      ? trips.live
+                      : trips.upcoming
                 }
                 activeSection={activeSection}
               />
@@ -342,12 +467,14 @@ function AdminMainPage() {
               <UsersContainer
                 users={
                   activeSection === "unverified"
-                    ? users.unverified
+                    ? getUsersToDisplay().unverified
                     : activeSection === "pendingVerification"
-                    ? users.pendingVerification
-                    : users.verified
+                      ? getUsersToDisplay().pendingVerification
+                      : getUsersToDisplay().verified
                 }
                 activeSection={activeSection}
+                searchQuery={searchQuery}
+                isSearching={isSearching}
               />
             )}
 

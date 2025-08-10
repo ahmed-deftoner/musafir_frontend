@@ -13,14 +13,24 @@ import { cn } from "@/lib/utils";
 interface UsersContainerProps {
   users: IUser[];
   activeSection: string;
+  searchQuery?: string;
+  isSearching?: boolean;
 }
 
-export function UsersContainer({ users, activeSection }: UsersContainerProps) {
+export function UsersContainer({ users, activeSection, searchQuery, isSearching }: UsersContainerProps) {
   const router = useRouter();
 
   const handleViewUserDetails = (userId: string) => {
     router.push(`/admin/user/${userId}`);
   };
+
+  if (isSearching) {
+    return (
+      <div className="text-center text-gray-500 py-8">
+        <p className="text-xl font-medium mb-2">Searching...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -68,7 +78,12 @@ export function UsersContainer({ users, activeSection }: UsersContainerProps) {
         </Card>
       )) : (
         <div className="text-center text-gray-500 py-8">
-          <p className="text-xl font-medium mb-2">No Users Available Yet</p>
+          <p className="text-xl font-medium mb-2">
+            {searchQuery
+              ? `No ${activeSection} users found for "${searchQuery}"`
+              : "No Users Available Yet"
+            }
+          </p>
         </div>
       )}
     </div>

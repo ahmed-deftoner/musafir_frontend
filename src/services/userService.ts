@@ -2,23 +2,46 @@ import axios from "axios";
 import { IUser } from "./types/user";
 
 export class UserService {
-  static async getUnverifiedUsers(): Promise<IUser[]> {
+  static async getUnverifiedUsers(search?: string): Promise<IUser[]> {
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/unverified-users`
+      `${process.env.NEXT_PUBLIC_API_URL}/user/unverified-users`,
+      {
+        params: { search },
+      }
     );
     return data;
   }
 
-  static async getVerifiedUsers(): Promise<IUser[]> {
+  static async getVerifiedUsers(search?: string): Promise<IUser[]> {
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/verified-users`
+      `${process.env.NEXT_PUBLIC_API_URL}/user/verified-users`,
+      {
+        params: { search },
+      }
     );
     return data;
   }
 
-  static async getPendingVerificationUsers(): Promise<IUser[]> {
+  static async getPendingVerificationUsers(search?: string): Promise<IUser[]> {
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/pending-verification-users`
+      `${process.env.NEXT_PUBLIC_API_URL}/user/pending-verification-users`,
+      {
+        params: { search },
+      }
+    );
+    return data;
+  }
+
+  static async searchAllUsers(search: string): Promise<{
+    unverified: IUser[];
+    pendingVerification: IUser[];
+    verified: IUser[];
+  }> {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/search-users`,
+      {
+        params: { search },
+      }
     );
     return data;
   }
